@@ -1,7 +1,10 @@
 // PROTECTED ROUTES
 // Description: Routes that require user to be authenticated before visiting.
 // Note: Add more strings/paths as needed
-export const protectedRoutes = new Set(["/dashboard", "/reset-password"]);
+export const protectedRoutes = new Set([
+  "/dashboard", // users will be redirected here if they're trying visit any authRoutes after authentication
+  "/reset-password",
+]);
 
 // AUTH ROUTES
 // Description: Routes that user can only visit if they are not authenticated.

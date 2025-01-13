@@ -1,3 +1,8 @@
+/*
+ ** NOTE: ONLY USE CREATE-SERVER-CLIENT INSTANCE WHEN DEALING WITH SERVER-SIDE ACTIONS SUCH AS
+ ** SIGNUP, LOGIN, PASSWORD RESET, LOGOUT, ETC. AND FOR PROTECTING PRIVATE ROUTES FROM UNWANTED
+ ** ACCESS IN THE `middleware.ts` FILE.
+ */
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 
