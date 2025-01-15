@@ -1,7 +1,7 @@
 // Login Page Layout
 import { Separator } from "@/components/ui/separator";
 import { HeadingTwo } from "@/components/typography/headings";
-import { SocialSignInButton } from "./socialSignInBtn";
+import { SocialSignInButton } from "@/components/socialSignIn/socialSignInBtn";
 import { EmailSignIn } from "./emailSignIn";
 
 

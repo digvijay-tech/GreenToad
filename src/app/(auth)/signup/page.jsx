@@ -1,3 +1,9 @@
+// Signup Page
+
+import { SignUpLayout } from "./components/layout";
+
 export default function SignUp() {
-  return <h1>Signup</h1>;
+  return (
+    <SignUpLayout pageHeading="Create an account!" />
+  );
 }
