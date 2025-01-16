@@ -2,7 +2,7 @@
 
 // DELETE LATER!
 
-import { createClient } from "@/utils/supabase/client";
+import { createClient } from "@/config/supabase/client";
 
 export const temp = async () => {
   const supabase = await createClient();
