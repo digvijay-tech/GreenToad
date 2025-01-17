@@ -115,12 +115,9 @@ export const signOutAction = async () => {
   return redirect("/sign-in");
 };
 
-
-
-
 /*
-** SOCIAL AUTH PROVIDERS / SOCIAL SIGN-INS
-*/
+ ** SOCIAL AUTH PROVIDERS / SOCIAL SIGN-INS
+ */
 export const signInWithGithub = async () => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
@@ -128,16 +125,17 @@ export const signInWithGithub = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "github",
     options: {
-      redirectTo: `${origin}/auth/callback`
-    }
+      redirectTo: `${origin}/auth/callback`,
+    },
   });
+
 
   if (error) {
     return error;
   }
-  
+
   redirect(data.url);
-}
+};
 
 export const signInWithApple = async () => {
   const supabase = await createClient();
@@ -146,13 +144,31 @@ export const signInWithApple = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "apple",
     options: {
-      redirectTo: `${origin}/auth/callback`
-    }
+      redirectTo: `${origin}/auth/callback`,
+    },
   });
 
   if (error) {
     return error;
   }
-  
+
   redirect(data.url);
-}
+};
+
+export const signInWithGoogle = async () => {
+  const supabase = await createClient();
+  const origin = (await headers()).get("origin");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return error;
+  }
+
+  redirect(data.url);
+};

@@ -3,10 +3,6 @@
 
 import { RecoverPasswordLayout } from "./components/layout";
 
-
-
 export default function RecoverPassword() {
-    return (
-        <RecoverPasswordLayout />
-    );
+  return <RecoverPasswordLayout />;
 }

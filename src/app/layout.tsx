@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import "./globals.css";
 
@@ -13,7 +14,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        {/* All Content */}
+        {children}
+
+        {/* Globally Placed Toast Element */}
+        <Toaster />
+      </body>
     </html>
   );
 }

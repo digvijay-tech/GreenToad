@@ -1,73 +1,81 @@
 "use client";
 
 // Social Sign-in Buttons
-import { signInWithGithub, signInWithApple } from "@/actions";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { signInWithGithub, signInWithApple, signInWithGoogle } from "@/actions";
 import { Button } from "@/components/ui/button";
-import GoogleIcon from "@mui/icons-material/Google";
-import MicrosoftIcon from "@mui/icons-material/Microsoft";
-import AppleIcon from "@mui/icons-material/Apple";
-import GitHubIcon from "@mui/icons-material/GitHub";
+import { useToast } from "@/hooks/use-toast";
 
-// Fixed User Identity Providers
-const google = "google";
-const microsoft = "microsoft";
-const apple = "apple";
-const github = "github";
+
+// Displays error messages in a toast
+const errorToast = (message) => {
+  const { toast } = useToast();
+
+  toast({
+      title: "Error",
+      description: message,
+      style: {
+          color: "#e74c3c",
+          textAlign: "justify",
+      },
+  });
+}
+
+// handles OAuth signin by given provider
+const handleOAuthSignIn = async (handler) => {
+  const error = await handler();
+
+  if (error) {
+    if (!error.message) {
+      errorToast("Something went wrong!");
+      return;
+    }
+
+    errorToast(error.message);
+  }
+}
+
+// fixed oauth providers and their props
+class Provider {
+  constructor(name, imageUrl, aspectRatio, cb) {
+    this.name = name,
+    this.imageUrl = imageUrl,
+    this.aspectRatio = aspectRatio,
+    this.cb = cb
+  }
+}
+
+const google = new Provider("Google", "/google-logo.png", 20, () => handleOAuthSignIn(signInWithGoogle));
+const microsoft = new Provider("Microsoft", "/microsoft-logo.png", 23, () => console.log("Signin with: Microsoft"));
+const apple = new Provider("Apple", "/apple-logo.png", 20, () => handleOAuthSignIn(signInWithApple));
+const github = new Provider("GitHub", "/github-logo.png", 23, () => handleOAuthSignIn(signInWithGithub));
+
+const providers = new Map();
+providers.set("google", google);
+providers.set("microsoft", microsoft);
+providers.set("apple", apple);
+providers.set("github", github);
+
 
 export function SocialSignInButton({ identityProvider }) {
-  const tempHandler = () => console.log("Signing-in with", identityProvider);
+  const [currentProvider, setCurrentProvider] = useState(null);
 
-  const handleGithubSignIn = async () => {
-    // handle this error later with a toast or dialog
-    const error = await signInWithGithub();
-    console.log(error);
-  }
-
-  const handleAppleSignIn = async () => {
-    // handle this error later with a toast or dialog
-    const error = await signInWithApple();
-    console.log(error);
-  }
+  useEffect(() => {
+    setCurrentProvider(providers.get(identityProvider));
+  }, []);
 
   return (
     <div>
-      {identityProvider === google && (
+      {currentProvider && (
         <Button
-          onClick={tempHandler}
-          className="w-full py-5 bg-[#0984e3] hover:bg-[#107acb]"
-        >
-          <GoogleIcon className="!size-5" />
-          <p className="text-md">Continue with Google</p>
-        </Button>
-      )}
-
-      {identityProvider === microsoft && (
-        <Button
-          onClick={tempHandler}
-          className="w-full py-5 bg-[#0652DD] hover:bg-[#0647c0]"
-        >
-          <MicrosoftIcon className="!size-5" />
-          <p className="text-md">Continue with Microsoft</p>
-        </Button>
-      )}
-
-      {identityProvider === apple && (
-        <Button
-          onClick={handleAppleSignIn}
-          className="w-full py-5 bg-[#1e272e] hover:bg-[#080a0b]"
-        >
-          <AppleIcon className="!size-6" />
-          <p className="text-md">Continue with Apple</p>
-        </Button>
-      )}
-
-      {identityProvider === github && (
-        <Button
-          onClick={handleGithubSignIn}
-          className="w-full py-5 bg-[#636e72] hover:bg-[#52585a]"
-        >
-          <GitHubIcon className="!size-6" />
-          <p className="text-md">Continue with GitHub</p>
+            onClick={currentProvider.cb}
+            className="w-full py-5 shadow-md  text-slate-800 bg-[#ffffff] hover:bg-[#fefefe] hover:shadow"
+          >
+            <Image src={currentProvider.imageUrl} width={currentProvider.aspectRatio} height={currentProvider.aspectRatio} alt={`${currentProvider.name} Logo`} />
+            <p className="text-md">
+              Continue with { currentProvider.name }
+            </p>
         </Button>
       )}
     </div>
