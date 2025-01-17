@@ -1,6 +1,7 @@
 "use client";
 
 // Social Sign-in Buttons
+import { signInWithGithub } from "@/actions";
 import { Button } from "@/components/ui/button";
 import GoogleIcon from "@mui/icons-material/Google";
 import MicrosoftIcon from "@mui/icons-material/Microsoft";
@@ -15,6 +16,12 @@ const github = "github";
 
 export function SocialSignInButton({ identityProvider }) {
   const tempHandler = () => console.log("Signing-in with", identityProvider);
+
+  const handleGithubSignIn = async () => {
+    // handle this error later with a toast or dialog
+    const error = await signInWithGithub();
+    console.log(error);
+  }
 
   return (
     <div>
@@ -50,7 +57,7 @@ export function SocialSignInButton({ identityProvider }) {
 
       {identityProvider === github && (
         <Button
-          onClick={tempHandler}
+          onClick={handleGithubSignIn}
           className="w-full py-5 bg-[#636e72] hover:bg-[#52585a]"
         >
           <GitHubIcon className="!size-6" />

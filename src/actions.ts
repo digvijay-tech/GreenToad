@@ -114,3 +114,27 @@ export const signOutAction = async () => {
   await supabase.auth.signOut();
   return redirect("/sign-in");
 };
+
+
+
+
+/*
+** SOCIAL AUTH PROVIDERS / SOCIAL SIGN-INS
+*/
+export const signInWithGithub = async () => {
+  const supabase = await createClient();
+  const origin = (await headers()).get("origin");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "github",
+    options: {
+      redirectTo: `${origin}/auth/callback`
+    }
+  });
+
+  if (error) {
+    return error;
+  }
+  
+  redirect(data.url);
+}
