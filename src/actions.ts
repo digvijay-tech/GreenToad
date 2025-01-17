@@ -138,3 +138,21 @@ export const signInWithGithub = async () => {
   
   redirect(data.url);
 }
+
+export const signInWithApple = async () => {
+  const supabase = await createClient();
+  const origin = (await headers()).get("origin");
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "apple",
+    options: {
+      redirectTo: `${origin}/auth/callback`
+    }
+  });
+
+  if (error) {
+    return error;
+  }
+  
+  redirect(data.url);
+}
