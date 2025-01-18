@@ -69,6 +69,7 @@ export function EmailSignIn() {
           <Input
             type="email"
             id="emailInput"
+            autoComplete="username"
             onChange={(e) => setEmail(e.target.value.trim())}
             required
           />
@@ -83,6 +84,7 @@ export function EmailSignIn() {
           <Input
             type="password"
             id="passwordInput"
+            autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value.trim())}
             required
           />

@@ -1,11 +1,13 @@
 "use client";
 
 // Social Sign-in Buttons
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import { signInWithGithub, signInWithApple, signInWithGoogle } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { GoogleLogoIcon } from "@/components/icons/google";
+import { BlackAppleLogoIcon } from "@/components/icons/apple";
+import { BlackGitHubLogoIcon } from "@/components/icons/github";
 
 // Displays error messages in a toast
 const errorToast = (message) => {
@@ -37,30 +39,26 @@ const handleOAuthSignIn = async (handler) => {
 
 // fixed oauth providers and their props
 class Provider {
-  constructor(name, imageUrl, aspectRatio, cb) {
+  constructor(name, icon, cb) {
     (this.name = name),
-      (this.imageUrl = imageUrl),
-      (this.aspectRatio = aspectRatio),
+      (this.icon = icon),
       (this.cb = cb);
   }
 }
 
-const google = new Provider("Google", "/google-logo.png", 20, () =>
+const google = new Provider("Google", GoogleLogoIcon, () =>
   handleOAuthSignIn(signInWithGoogle),
 );
-const microsoft = new Provider("Microsoft", "/microsoft-logo.png", 23, () =>
-  console.log("Signin with: Microsoft"),
-);
-const apple = new Provider("Apple", "/apple-logo.png", 16, () =>
+
+const apple = new Provider("Apple", BlackAppleLogoIcon, () =>
   handleOAuthSignIn(signInWithApple),
 );
-const github = new Provider("GitHub", "/github-logo.png", 17, () =>
+const github = new Provider("GitHub", BlackGitHubLogoIcon, () =>
   handleOAuthSignIn(signInWithGithub),
 );
 
 const providers = new Map();
 providers.set("google", google);
-providers.set("microsoft", microsoft);
 providers.set("apple", apple);
 providers.set("github", github);
 
@@ -76,16 +74,13 @@ export function SocialSignInButton({ identityProvider }) {
     <div>
       {currentProvider && (
         <Button
+          variant="outline"
           onClick={currentProvider.cb}
-          className="w-full py-5 shadow-sm border text-slate-800 bg-[#ffffff] hover:bg-[#f5f6fa]"
+          className="w-full py-5 text-slate-800"
         >
-          <Image
-            src={currentProvider.imageUrl}
-            width={currentProvider.aspectRatio}
-            height={currentProvider.aspectRatio}
-            alt={`${currentProvider.name} Logo`}
-            style={{ width: "auto", height: "auto" }} // Ensures that aspect ratio is maintained
-          />
+          <span className="h-9 w-8 flex jusitify-center items-center">
+            <currentProvider.icon />
+          </span>
           <p className="text-md">Continue with {currentProvider.name}</p>
         </Button>
       )}

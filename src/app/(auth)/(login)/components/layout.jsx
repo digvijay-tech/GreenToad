@@ -13,7 +13,7 @@ export function LoginLayout({ pageHeading }) {
           <HeadingTwo text={pageHeading} />
 
           {/* Social Sign-in options */}
-          {["google", "microsoft", "apple", "github"].map((ip, id) => (
+          {["google", "apple", "github"].map((ip, id) => (
             <div key={id} className="mt-2">
               <SocialSignInButton identityProvider={ip} />
             </div>
@@ -21,7 +21,7 @@ export function LoginLayout({ pageHeading }) {
 
           <div className="my-4 flex flex-row items-center justify-between items-center">
             <Separator className="flex-1" />
-            <p className="mx-3 text-sm font-medium leading-none">or</p>
+            <p className="mx-3 text-sm text-muted-foreground font-medium leading-none">or</p>
             <Separator className="flex-1" />
           </div>
 

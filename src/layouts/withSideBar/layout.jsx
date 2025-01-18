@@ -18,7 +18,7 @@ export default function SideBarLayout({ children, pageHeading }) {
   const handleLogOut = async () => {
     // start loading
     setIsLoading(true);
-    
+
     // supabase signout action
     await signOutAction();
   }

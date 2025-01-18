@@ -78,6 +78,7 @@ export function ResetPasswordForm() {
           <Input
             id="emailInput"
             type="email"
+            autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value.trim())}
             required

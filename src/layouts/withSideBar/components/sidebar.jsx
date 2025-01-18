@@ -29,7 +29,6 @@ import {
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useAccountContext } from "@/contexts/account/index";
-import { getUserProfile } from "../actions/getUserProfile";
 import { Separator } from "@/components/ui/separator";
 import { ChevronDown } from "lucide-react";
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -56,16 +55,23 @@ const links = [
 
 
 export function AppSidebar() {
-    const { account, getUser } = useAccountContext();
+    const { user, getUser } = useAccountContext();
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
     const [workspace, setWorkspace] = useState("Default");
 
     useEffect(() => {
-        console.log("1. Effect Fired!");
+        if (user) {
+            setEmail(user.email);
+            setName(user.user_metadata.full_name);
+            setPictureUrl(user.user_metadata.picture);
+
+            return;
+        }
+
         (async function() {
-            const profile = await getUserProfile();
+            const profile = await getUser();
 
             if (profile) {
                 setEmail(profile.email);
@@ -73,17 +79,7 @@ export function AppSidebar() {
                 setPictureUrl(profile.user_metadata.picture);
             }
         })();
-    }, []);
-
-    useEffect(() => {
-        console.log("2. Effect Fired!");
-        getUser();
-    }, []);
-
-    useEffect(() => {
-        console.log("3. Effect Fired!");
-        console.log(account);
-    }, [account]);
+    }, [user]);
 
     return (
         <Sidebar>

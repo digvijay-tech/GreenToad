@@ -122,6 +122,7 @@ export function EmailSignUp() {
           <Input
             id="emailInput"
             type="email"
+            autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value.trim())}
             required
@@ -132,6 +133,7 @@ export function EmailSignUp() {
           <Input
             id="passOneInput"
             type="password"
+            autoComplete="new-password"
             value={createPassword}
             onChange={(e) => setCreatePassword(e.target.value.trim())}
             maxLength={22}
@@ -143,6 +145,7 @@ export function EmailSignUp() {
           <Input
             id="passTwoInput"
             type="password"
+            autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value.trim())}
             maxLength={22}
