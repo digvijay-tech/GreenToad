@@ -3,7 +3,7 @@
 // Social Sign-in Buttons
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { signInWithGithub, signInWithApple, signInWithGoogle } from "@/actions";
+import { signInWithGithub, signInWithApple, signInWithGoogle } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
@@ -51,10 +51,10 @@ const google = new Provider("Google", "/google-logo.png", 20, () =>
 const microsoft = new Provider("Microsoft", "/microsoft-logo.png", 23, () =>
   console.log("Signin with: Microsoft"),
 );
-const apple = new Provider("Apple", "/apple-logo.png", 20, () =>
+const apple = new Provider("Apple", "/apple-logo.png", 16, () =>
   handleOAuthSignIn(signInWithApple),
 );
-const github = new Provider("GitHub", "/github-logo.png", 23, () =>
+const github = new Provider("GitHub", "/github-logo.png", 17, () =>
   handleOAuthSignIn(signInWithGithub),
 );
 
@@ -64,25 +64,27 @@ providers.set("microsoft", microsoft);
 providers.set("apple", apple);
 providers.set("github", github);
 
+
 export function SocialSignInButton({ identityProvider }) {
   const [currentProvider, setCurrentProvider] = useState(null);
 
   useEffect(() => {
     setCurrentProvider(providers.get(identityProvider));
-  }, []);
+  }, [identityProvider]);
 
   return (
     <div>
       {currentProvider && (
         <Button
           onClick={currentProvider.cb}
-          className="w-full py-5 shadow-md  text-slate-800 bg-[#ffffff] hover:bg-[#fefefe] hover:shadow"
+          className="w-full py-5 shadow-sm border text-slate-800 bg-[#ffffff] hover:bg-[#f5f6fa]"
         >
           <Image
             src={currentProvider.imageUrl}
             width={currentProvider.aspectRatio}
             height={currentProvider.aspectRatio}
             alt={`${currentProvider.name} Logo`}
+            style={{ width: "auto", height: "auto" }} // Ensures that aspect ratio is maintained
           />
           <p className="text-md">Continue with {currentProvider.name}</p>
         </Button>

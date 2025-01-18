@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/config/supabase/middleware";
 import { createClient } from "@/config/supabase/server";
 
-export async function middleware(request: NextRequest) {
+export const middleware = async (request: NextRequest) => {
   // creating new supbase instance
   const supabase = await createClient();
 

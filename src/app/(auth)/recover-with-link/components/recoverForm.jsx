@@ -26,7 +26,7 @@ export function RecoverForm() {
         <Alert variant="success" className="my-3">
           <AlertCircle className="h-4 w-4" color="#2ecc71" />
           <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
+          <AlertDescription>{ successMessage }</AlertDescription>
         </Alert>
       )}
 
@@ -35,7 +35,7 @@ export function RecoverForm() {
         <Alert variant="destructive" className="my-3">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{ error }</AlertDescription>
         </Alert>
       )}
 
@@ -49,6 +49,7 @@ export function RecoverForm() {
             required
           />
         </div>
+        
         <div className="mt-2">
           <Label htmlFor="passwordTwo">Repeat Password</Label>
           <Input
@@ -58,6 +59,7 @@ export function RecoverForm() {
             required
           />
         </div>
+
         <div className="mt-3">
           {isLoading ? (
             <Button className="w-full" disabled>

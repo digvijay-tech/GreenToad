@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { signInAction } from "@/actions";
+import { signInAction } from "@/actions/auth";
 import { isEmail } from "validator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -95,9 +95,9 @@ export function EmailSignIn() {
         <div className="text-left mt-2">
           <Link
             href="/forgot-password"
-            className="text-green-500 hover:underline"
+            className="hover:underline"
           >
-            Forgot Password?
+            Forgot Password
           </Link>
         </div>
         <div className="text-left mt-4">
@@ -116,7 +116,7 @@ export function EmailSignIn() {
 
         <div className="text-center mt-3">
           Don't have an account?
-          <Link href="/signup" className="ml-2 text-green-500 hover:underline">
+          <Link href="/signup" className="ml-2 underline hover:no-underline">
             Signup
           </Link>
         </div>

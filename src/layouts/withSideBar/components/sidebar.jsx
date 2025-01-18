@@ -20,7 +20,6 @@ import {
     DropdownMenuItem,
     DropdownMenuRadioGroup,
     DropdownMenuRadioItem,
-    DropdownMenuSeparator
 } from "@/components/ui/dropdown-menu";
 import {
     Avatar,
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useAccountContext } from "@/contexts/account/index";
 import { getUserProfile } from "../actions/getUserProfile";
 import { Separator } from "@/components/ui/separator";
 import { ChevronDown } from "lucide-react";
@@ -42,14 +42,28 @@ import MapIcon from '@mui/icons-material/Map';
 import PersonIcon from '@mui/icons-material/Person';
 
 
+// Sidebar Links
+const links = [
+    { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+    { label: "Boards", path: "/boards", icon: ViewKanbanIcon },
+    { label: "Todos", path: "/todos", icon: ListAltIcon },
+    { label: "Calendar", path: "/calendar", icon: CalendarMonthIcon },
+    { label: "Pomodoro", path: "/pomodoro", icon: TimerIcon },
+    { label: "Roadmaps", path: "/roadmaps", icon: MapIcon },
+    { label: "Settings", path: "/settings", icon: SettingsIcon },
+    // add as needed
+];
+
+
 export function AppSidebar() {
+    const { account, getUser } = useAccountContext();
     const [name, setName] = useState(null);
     const [email, setEmail] = useState(null);
     const [pictureUrl, setPictureUrl] = useState(null);
     const [workspace, setWorkspace] = useState("Default");
 
     useEffect(() => {
-        console.log("sdjvbnk");
+        console.log("1. Effect Fired!");
         (async function() {
             const profile = await getUserProfile();
 
@@ -57,11 +71,19 @@ export function AppSidebar() {
                 setEmail(profile.email);
                 setName(profile.user_metadata.full_name);
                 setPictureUrl(profile.user_metadata.picture);
-
-                return;
             }
         })();
     }, []);
+
+    useEffect(() => {
+        console.log("2. Effect Fired!");
+        getUser();
+    }, []);
+
+    useEffect(() => {
+        console.log("3. Effect Fired!");
+        console.log(account);
+    }, [account]);
 
     return (
         <Sidebar>
@@ -79,7 +101,7 @@ export function AppSidebar() {
                                 </SidebarMenuButton>
                             </DropdownMenuTrigger>
 
-                                <DropdownMenuContent>
+                            <DropdownMenuContent>
                                 <DropdownMenuRadioGroup value={workspace} onValueChange={setWorkspace}>
                                     <DropdownMenuRadioItem value="University">
                                         University
@@ -97,69 +119,23 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            <Separator />
+            <Separator className="mt-2" />
 
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupContent>
-                    <SidebarMenu>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/dashboard">
-                                    <DashboardIcon />
-                                    Dashboard
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/boards">
-                                    <ViewKanbanIcon />
-                                    Boards
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/todos">
-                                    <ListAltIcon />
-                                    Todos
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/calendar">
-                                    <CalendarMonthIcon />
-                                    Calendar
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/pomodoro">
-                                    <TimerIcon />
-                                    Pomodoro
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/roadmaps">
-                                    <MapIcon />
-                                    Roadmaps
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                        <SidebarMenuItem>
-                            <SidebarMenuButton asChild>
-                                <Link href="/settings">
-                                    <SettingsIcon />
-                                    Settings
-                                </Link>
-                            </SidebarMenuButton>
-                        </SidebarMenuItem>
-                    </SidebarMenu>
+                        <SidebarMenu>
+                            {links.map((item, index) => (
+                                <SidebarMenuItem key={index} className="rounded-sm hover:bg-[#f3f3f3]">
+                                    <SidebarMenuButton asChild>
+                                        <Link href={item.path}>
+                                            <item.icon />
+                                            { item.label }
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            ))}
+                        </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>

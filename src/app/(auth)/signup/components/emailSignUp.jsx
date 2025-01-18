@@ -2,13 +2,15 @@
 "use client";
 
 import { useState } from "react";
-import { isEmail, isStrongPassword } from "validator";
-import { signUpAction } from "@/actions";
+import { isEmail } from "validator";
+import { validatePassword } from "@/utils/validators";
+import { signUpAction } from "@/actions/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2, CheckCheckIcon } from "lucide-react";
+
 
 export function EmailSignUp() {
   const [successMessage, setSuccessMessage] = useState(null);
@@ -33,15 +35,7 @@ export function EmailSignUp() {
     }
 
     // validate password
-    const options = {
-      minLength: 8,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 1,
-    };
-
-    if (!isStrongPassword(createPassword, options)) {
+    if (!validatePassword(createPassword)) {
       setIsLoading(false);
       setError(
         "Password is weak. Please use combination of uppercase and lowercase characters, numbers and special symbol.",
@@ -107,8 +101,8 @@ export function EmailSignUp() {
       {/* Rendering Success Messages */}
       {successMessage && (
         <Alert variant="success" className="my-3">
-          <AlertCircle className="h-4 w-4" color="#2ecc71" />
-          <AlertTitle>🎉 Hooray! 🎉</AlertTitle>
+          <CheckCheckIcon className="h-6 w-6" color="#2ecc71" />
+          <AlertTitle>🎉 Hooray!</AlertTitle>
           <AlertDescription>{successMessage}</AlertDescription>
         </Alert>
       )}
@@ -116,7 +110,7 @@ export function EmailSignUp() {
       {/* Rendering Error Messages */}
       {error && (
         <Alert variant="destructive" className="my-3">
-          <AlertCircle className="h-4 w-4" />
+          <AlertCircle className="h-6 w-6" />
           <AlertTitle>Error</AlertTitle>
           <AlertDescription>{error}</AlertDescription>
         </Alert>
@@ -140,6 +134,7 @@ export function EmailSignUp() {
             type="password"
             value={createPassword}
             onChange={(e) => setCreatePassword(e.target.value.trim())}
+            maxLength={22}
             required
           />
         </div>
@@ -150,6 +145,7 @@ export function EmailSignUp() {
             type="password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value.trim())}
+            maxLength={22}
             required
           />
         </div>

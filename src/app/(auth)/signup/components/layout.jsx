@@ -7,6 +7,7 @@ import { EmailSignUp } from "./emailSignUp";
 import { SocialSignInButton } from "@/components/socialSignIn/socialSignInBtn";
 import { Separator } from "@/components/ui/separator";
 
+
 export function SignUpLayout({ pageHeading }) {
   return (
     <main>
@@ -27,7 +28,7 @@ export function SignUpLayout({ pageHeading }) {
               <Separator className="flex-1" />
             </div>
 
-            {/* Social Signup Option */}
+            {/* Social Signin Buttons */}
             {["google", "microsoft", "apple", "github"].map((ip, id) => (
               <div key={id} className="mt-2">
                 <SocialSignInButton identityProvider={ip} />
@@ -37,7 +38,7 @@ export function SignUpLayout({ pageHeading }) {
             <div className="mt-5">
               <p className="text-center">
                 Already have an account?
-                <Link href="/" className="ml-2 text-green-500 hover:underline">
+                <Link href="/" className="ml-2 underline hover:no-underline">
                   Login Instead
                 </Link>
               </p>

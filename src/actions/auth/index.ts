@@ -4,8 +4,17 @@ import { encodedRedirect } from "@/config/utils";
 import { createClient } from "@/config/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { AuthError } from "@supabase/supabase-js";
 
-export const signUpAction = async (formData: FormData) => {
+
+
+/**
+ * Handles user signup by validating email and password, and interacting with Supabase to create a new user.
+ * 
+ * @param {FormData} formData - The form data containing the user's email and password.
+ * @returns {string | object} - An error message if signup fails, or the Supabase response data on success.
+**/
+export const signUpAction = async (formData: FormData): Promise<string | object> => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
@@ -30,7 +39,14 @@ export const signUpAction = async (formData: FormData) => {
   }
 };
 
-export const signInAction = async (formData: FormData) => {
+
+/**
+ * Handles user sign-in by authenticating the user with Supabase using email and password.
+ * 
+ * @param {FormData} formData - The form data containing the user's email and password.
+ * @returns {string | void} - An error message if sign-in fails, or redirects to the dashboard on success.
+**/
+export const signInAction = async (formData: FormData): Promise<AuthError | void> => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = await createClient();
@@ -47,6 +63,9 @@ export const signInAction = async (formData: FormData) => {
   return redirect("/dashboard");
 };
 
+
+
+// Still Working on it!
 export const forgotPasswordAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
   const supabase = await createClient();
@@ -72,6 +91,9 @@ export const forgotPasswordAction = async (formData: FormData) => {
   return "Check your email for a link to reset your password.";
 };
 
+
+
+// Still working on it!
 export const resetPasswordAction = async (formData: FormData) => {
   const supabase = await createClient();
 
@@ -85,7 +107,7 @@ export const resetPasswordAction = async (formData: FormData) => {
       "Password and confirm password are required",
     );
   }
-
+  
   if (password !== confirmPassword) {
     encodedRedirect(
       "error",
@@ -109,16 +131,29 @@ export const resetPasswordAction = async (formData: FormData) => {
   encodedRedirect("success", "/protected/reset-password", "Password updated");
 };
 
-export const signOutAction = async () => {
+
+/**
+ * Logs the user out by signing out from Supabase and redirecting to the login page.
+ * 
+ * @returns {void} - Redirects to the homepage after successful sign-out.
+**/
+export const signOutAction = async (): Promise<void> => {
   const supabase = await createClient();
   await supabase.auth.signOut();
   return redirect("/");
 };
 
-/*
- ** SOCIAL AUTH PROVIDERS / SOCIAL SIGN-INS
- */
-export const signInWithGithub = async () => {
+
+
+/**********************************************************************************
+----------------------------- OAUTH SIGNIN ACTIONS --------------------------------
+***********************************************************************************/
+/**
+ * Initiates OAuth sign-in with Respective Identity Provider via Supabase and redirects the user to the callback URL.
+ * 
+ * @returns {void | string} - Redirects to Identity Provider for authentication or returns an error if the sign-in fails.
+**/
+export const signInWithGithub = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -136,7 +171,8 @@ export const signInWithGithub = async () => {
   redirect(data.url);
 };
 
-export const signInWithApple = async () => {
+
+export const signInWithApple = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -154,7 +190,8 @@ export const signInWithApple = async () => {
   redirect(data.url);
 };
 
-export const signInWithGoogle = async () => {
+
+export const signInWithGoogle = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -171,3 +208,4 @@ export const signInWithGoogle = async () => {
 
   redirect(data.url);
 };
+

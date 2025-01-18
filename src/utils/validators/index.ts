@@ -1,16 +1,23 @@
 // Utility functions for validating user inputs or incoming data
 import { isStrongPassword } from "validator";
+import {
+  PASSWORD_MINLEN,
+  PASSWORD_MIN_LCASE,
+  PASSWORD_MIN_UCASE,
+  PASSWORD_MIN_NUMS,
+  PASSWORD_MIN_SYMBOLS,
+} from "@/utils/constants/password";
 
 // Function to validate a password
 // @param input: string - The password to validate
 // @returns: boolean - Whether the password meets the criteria
-export function validatePassword(input: string): boolean {
+export const validatePassword = (input: string): boolean => {
   const options = {
-    minLength: 8,
-    minLowercase: 1,
-    minUppercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
+    minLength: PASSWORD_MINLEN,
+    minLowercase: PASSWORD_MIN_LCASE,
+    minUppercase: PASSWORD_MIN_UCASE,
+    minNumbers: PASSWORD_MIN_NUMS,
+    minSymbols: PASSWORD_MIN_SYMBOLS,
   };
 
   return isStrongPassword(input, options);

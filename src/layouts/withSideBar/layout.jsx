@@ -2,7 +2,7 @@
 "use client";
 
 import { useState } from "react";
-import { signOutAction } from "@/actions";
+import { signOutAction } from "@/actions/auth";
 import { LoadingOverlay } from "@/components/overlays/loadingOverlay";
 import { AppSidebar } from "./components/sidebar";
 import { HeadingTwo } from "@/components/typography/headings";
@@ -28,16 +28,16 @@ export default function SideBarLayout({ children, pageHeading }) {
         <SidebarProvider>
           <AppSidebar />
           <div className="w-full">
-            <div className="sticky top-0 right-0 left-0 border-b bg-[#ffffff]">
+            <div className="sticky top-0 right-0 left-0 px-3 border-b bg-[#ffffff]">
               <div className="flex flex-row items-center justify-between py-2">
                 <div className="flex flex-row items-center justify-between">
                   <SidebarTrigger size="icon" />
 
-                  <div className="h-5">
+                  <div className="h-5" style={{ marginRight: "7px" }}>
                     <Separator orientation="vertical" />
                   </div>
 
-                  <div className="ml-3">
+                  <div>
                     <HeadingTwo text={pageHeading} />
                   </div>
                 </div>

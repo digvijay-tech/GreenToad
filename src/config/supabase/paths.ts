@@ -3,7 +3,14 @@
 // Note: Add more strings/paths as needed
 export const protectedRoutes = new Set([
   "/dashboard", // users will be redirected here if they're trying visit any authRoutes after authentication
-  "/reset-password",
+  "/reset-password", // later, nest this in settings/account page
+  "/boards",
+  "/todos",
+  "/calendar",
+  "/pomodoro",
+  "/roadmaps",
+  "/account",
+  "/settings",
 ]);
 
 // AUTH ROUTES

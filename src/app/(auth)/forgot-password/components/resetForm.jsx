@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { isEmail } from "validator";
-import { forgotPasswordAction } from "@/actions";
+import { forgotPasswordAction } from "@/actions/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -59,7 +59,7 @@ export function ResetPasswordForm() {
         <Alert variant="success" className="my-3">
           <AlertCircle className="h-4 w-4" color="#2ecc71" />
           <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{successMessage}</AlertDescription>
+          <AlertDescription>{ successMessage }</AlertDescription>
         </Alert>
       )}
 
@@ -68,7 +68,7 @@ export function ResetPasswordForm() {
         <Alert variant="destructive" className="my-3">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
+          <AlertDescription>{ error }</AlertDescription>
         </Alert>
       )}
 
@@ -99,7 +99,7 @@ export function ResetPasswordForm() {
         <div className="mt-3">
           <p className="">
             Go back to
-            <Link href="/" className="ml-2 text-green-500 hover:underline">
+            <Link href="/" className="ml-2 underline hover:no-underline">
               Login
             </Link>
           </p>
