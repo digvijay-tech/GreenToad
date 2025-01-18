@@ -112,7 +112,7 @@ export const resetPasswordAction = async (formData: FormData) => {
 export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  return redirect("/sign-in");
+  return redirect("/");
 };
 
 /*
@@ -128,7 +128,6 @@ export const signInWithGithub = async () => {
       redirectTo: `${origin}/auth/callback`,
     },
   });
-
 
   if (error) {
     return error;
