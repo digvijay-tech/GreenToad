@@ -59,7 +59,7 @@ export function ResetPasswordForm() {
         <Alert variant="success" className="my-3">
           <AlertCircle className="h-4 w-4" color="#2ecc71" />
           <AlertTitle>Success</AlertTitle>
-          <AlertDescription>{ successMessage }</AlertDescription>
+          <AlertDescription>{successMessage}</AlertDescription>
         </Alert>
       )}
 
@@ -68,7 +68,7 @@ export function ResetPasswordForm() {
         <Alert variant="destructive" className="my-3">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{ error }</AlertDescription>
+          <AlertDescription>{error}</AlertDescription>
         </Alert>
       )}
 

@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2, CheckCheckIcon } from "lucide-react";
 
-
 export function EmailSignUp() {
   const [successMessage, setSuccessMessage] = useState(null);
   const [error, setError] = useState(null);

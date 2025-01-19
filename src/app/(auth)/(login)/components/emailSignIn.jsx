@@ -95,10 +95,7 @@ export function EmailSignIn() {
           </p>
         </div>
         <div className="text-left mt-2">
-          <Link
-            href="/forgot-password"
-            className="hover:underline"
-          >
+          <Link href="/forgot-password" className="hover:underline">
             Forgot Password
           </Link>
         </div>

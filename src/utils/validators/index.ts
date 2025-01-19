@@ -21,4 +21,4 @@ export const validatePassword = (input: string): boolean => {
   };
 
   return isStrongPassword(input, options);
-}
+};

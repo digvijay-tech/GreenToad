@@ -7,7 +7,6 @@ import { EmailSignUp } from "./emailSignUp";
 import { SocialSignInButton } from "@/components/socialSignIn/socialSignInBtn";
 import { Separator } from "@/components/ui/separator";
 
-
 export function SignUpLayout({ pageHeading }) {
   return (
     <main>
@@ -24,7 +23,9 @@ export function SignUpLayout({ pageHeading }) {
 
             <div className="my-4 flex flex-row items-center justify-between items-center">
               <Separator className="flex-1" />
-              <p className="mx-3 text-sm font-medium text-muted-foreground leading-none">or</p>
+              <p className="mx-3 text-sm font-medium text-muted-foreground leading-none">
+                or
+              </p>
               <Separator className="flex-1" />
             </div>
 

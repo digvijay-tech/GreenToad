@@ -13,4 +13,4 @@ export const encodedRedirect = (
   message: string,
 ): never => {
   return redirect(`${path}?${type}=${encodeURIComponent(message)}`);
-}
+};

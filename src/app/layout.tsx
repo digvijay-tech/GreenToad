@@ -19,7 +19,7 @@ export default function RootLayout({
         {/* User Account Context */}
         <AccountProvider>
           {/* All Other Pages and Components */}
-          { children }
+          <main>{children}</main>
         </AccountProvider>
 
         {/* Globally Placed Toast Element */}

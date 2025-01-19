@@ -12,4 +12,3 @@ export const PASSWORD_MIN_NUMS = 1;
 
 // minimum symbols required
 export const PASSWORD_MIN_SYMBOLS = 1;
-

@@ -21,7 +21,9 @@ export function LoginLayout({ pageHeading }) {
 
           <div className="my-4 flex flex-row items-center justify-between items-center">
             <Separator className="flex-1" />
-            <p className="mx-3 text-sm text-muted-foreground font-medium leading-none">or</p>
+            <p className="mx-3 text-sm text-muted-foreground font-medium leading-none">
+              or
+            </p>
             <Separator className="flex-1" />
           </div>
 

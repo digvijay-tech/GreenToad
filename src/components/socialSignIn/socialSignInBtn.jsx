@@ -2,7 +2,11 @@
 
 // Social Sign-in Buttons
 import { useEffect, useState } from "react";
-import { signInWithGithub, signInWithApple, signInWithGoogle } from "@/actions/auth";
+import {
+  signInWithGithub,
+  signInWithApple,
+  signInWithGoogle,
+} from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { GoogleLogoIcon } from "@/components/icons/google";
@@ -40,9 +44,7 @@ const handleOAuthSignIn = async (handler) => {
 // fixed oauth providers and their props
 class Provider {
   constructor(name, icon, cb) {
-    (this.name = name),
-      (this.icon = icon),
-      (this.cb = cb);
+    (this.name = name), (this.icon = icon), (this.cb = cb);
   }
 }
 
@@ -61,7 +63,6 @@ const providers = new Map();
 providers.set("google", google);
 providers.set("apple", apple);
 providers.set("github", github);
-
 
 export function SocialSignInButton({ identityProvider }) {
   const [currentProvider, setCurrentProvider] = useState(null);

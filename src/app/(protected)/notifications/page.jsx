@@ -1,7 +1,7 @@
-export default function Todos() {
+export default function Notifications() {
   return (
     <div className="mt-[60px]">
-      <h2>Todos</h2>
+      <h2>notifications</h2>
 
       {Array.from({ length: 100 }).map((v, i) => (
         <div
