@@ -17,14 +17,21 @@ export function AccountProvider({ children }) {
 
       if (response) {
         setUser(response);
+        // console.log(response);
       }
     }
 
     return user;
   };
 
+  // remove user state when logout happens
+  // to make sure when new user logs-in previous state is unpersisted
+  const removeUser = () => {
+    setUser(null);
+  };
+
   return (
-    <AccountContext.Provider value={{ user, getUser }}>
+    <AccountContext.Provider value={{ user, getUser, removeUser }}>
       {children}
     </AccountContext.Provider>
   );

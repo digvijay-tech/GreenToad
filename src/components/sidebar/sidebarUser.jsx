@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { signOutAction } from "@/actions/auth";
+import { useAccountContext } from "@/contexts/account";
 import { LoadingOverlay } from "@/components/overlays/loadingOverlay";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -35,11 +36,15 @@ import {
 export function SidebarUser({ name, email, imageUrl }) {
   const pathname = usePathname();
   const { isMobile } = useSidebar();
+  const { removeUser } = useAccountContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogOut = async () => {
     // start loading
     setIsLoading(true);
+
+    // remove user state from account context
+    removeUser();
 
     // supabase signout action
     await signOutAction();
