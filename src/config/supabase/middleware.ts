@@ -39,7 +39,12 @@ export const updateSession = async (request: NextRequest) => {
   const user = await supabase.auth.getUser();
 
   // Upon failed authentication check, user is redirected back to login
-  if (protectedRoutes.has(request.nextUrl.pathname) && user.error) {
+  // accessing any nested route starting with protected route will be blocked if not authenticated
+  const isProtected = Array.from(protectedRoutes).some((route) =>
+    request.nextUrl.pathname.startsWith(route),
+  );
+
+  if (isProtected && user.error) {
     return NextResponse.redirect(new URL("/", request.url));
   }
 

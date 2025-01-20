@@ -1,14 +1,16 @@
+import { BoardPageHeader } from "./components/header";
+import { BoardsList } from "./components/boardlist";
+
 export default function Boards() {
   return (
-    <div className="mt-[60px]">
-      <h2>Manage Boards</h2>
+    <div className="mt-[60px] container mx-auto">
+      {/* Page Heading and Create Board Button */}
+      <BoardPageHeader />
 
-      {Array.from({ length: 100 }).map((v, i) => (
-        <div
-          key={i}
-          className="my-3 rounded-md w-full h-[100px] bg-[#f3f3f3]"
-        ></div>
-      ))}
+      {/* Grid of Boards and Controls */}
+      <div className="mt-5">
+        <BoardsList />
+      </div>
     </div>
   );
 }
