@@ -4,22 +4,10 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
+import LockIcon from '@mui/icons-material/Lock';
 
-const dummyData = [
-  { id: 1, name: "Computer Science", background: "#2980b9" },
-  { id: 2, name: "Social Studies Thesis", background: "#9b59b6" },
-  { id: 3, name: "Classical Physics", background: "#34495e" },
-  { id: 4, name: "Quantum Physics", background: "#f39c12" },
-  { id: 5, name: "Astro Gym Website Project", background: "#d35400" },
-  {
-    id: 6,
-    name: "CN6000 Module Research Work and Report",
-    background: "#A3CB38",
-  },
-  { id: 7, name: "CN6003 AI Submission", background: "#1B1464" },
-];
 
-export function BoardsList() {
+export function BoardsList({ data }) {
   const [searchInput, setSearchInput] = useState("");
   const [boards, setBoards] = useState(null);
   const [matchedBoards, setMatchedBoards] = useState([]);
@@ -41,12 +29,10 @@ export function BoardsList() {
 
   // for loading boards in state
   useEffect(() => {
-    // simulating slow response
-    setTimeout(() => {
-      setBoards(dummyData);
-      setMatchedBoards(dummyData);
-    }, 1500);
-  }, []);
+    setBoards(data);
+    setMatchedBoards(data);
+  }, [data]);
+
 
   return (
     <div>
@@ -84,11 +70,15 @@ export function BoardsList() {
             <Link href={`/boards/${board.id}`} key={board.id}>
               <div
                 style={{ background: board.background }}
-                className="text-white rounded-md px-4 py-3 h-[90px] rounded-md hover:opacity-90 transition-opacity"
+                className="text-white flex flex-col justify-between rounded-md px-4 py-3 h-[90px] rounded-md hover:opacity-90 transition-opacity"
               >
                 <p className="text-md font-semibold line-clamp-2">
                   {board.name}
                 </p>
+
+                <div className="flex flex-row justify-end">
+                  <LockIcon className="h-3 w-3 opacity-90" />
+                </div>
               </div>
             </Link>
           ))}

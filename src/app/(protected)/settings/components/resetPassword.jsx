@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useAccountContext } from "@/contexts/account";
 import { authenticateAndResetPassword } from "../actions/index";
 import { useToast } from "@/hooks/use-toast";
-import { validatePassword } from "@/utils/validators/index";
+import { isValidPassword } from "@/utils/validators/index";
 import {
   Card,
   CardHeader,
@@ -49,13 +49,13 @@ export function ResetPassword() {
     setIsLoading(true);
 
     // validating password inputs
-    if (!validatePassword(currentPassword)) {
+    if (!isValidPassword(currentPassword)) {
       errorToast(toast, "Invalid current password!");
       setIsLoading(false);
       return;
     }
 
-    if (!validatePassword(createPassword)) {
+    if (!isValidPassword(createPassword)) {
       errorToast(toast, "Created password is invalid!");
       setIsLoading(false);
       return;
@@ -93,7 +93,7 @@ export function ResetPassword() {
         },
       });
 
-      setTimeout(() => redirect("/"), 2000);
+      redirect("/");
     } catch (e) {
       if (!e.message) {
         errorToast(toast, "Something went wrong!");

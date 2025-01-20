@@ -3,7 +3,7 @@
 
 import { useState } from "react";
 import { isEmail } from "validator";
-import { validatePassword } from "@/utils/validators";
+import { isValidPassword } from "@/utils/validators";
 import { signUpAction } from "@/actions/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,7 +34,7 @@ export function EmailSignUp() {
     }
 
     // validate password
-    if (!validatePassword(createPassword)) {
+    if (!isValidPassword(createPassword)) {
       setIsLoading(false);
       setError(
         "Password is weak. Please use combination of uppercase and lowercase characters, numbers and special symbol.",
