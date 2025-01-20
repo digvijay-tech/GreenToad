@@ -23,7 +23,8 @@ export default function Boards() {
   const { toast } = useToast();
   const [boards, setBoards] = useState(null);
 
-  // handle callback from board page header component when new board is created
+  // handle callback from BoardPageHeader component when new board is created
+  // and fetch new state
   const handleCreateCallback = () => {
     (async function() {
       const result = await fetchBoards();

@@ -76,8 +76,9 @@ export function BoardsList({ data }) {
                   {board.name}
                 </p>
 
+                {/* Displaying Lock Icon if the board is marked as closed */}
                 <div className="flex flex-row justify-end">
-                  <LockIcon className="h-3 w-3 opacity-90" />
+                  {board.isClosed && <LockIcon className="h-3 w-3 opacity-90" />}
                 </div>
               </div>
             </Link>

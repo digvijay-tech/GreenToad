@@ -8,33 +8,13 @@ import { HeadingTwo } from "@/components/typography/headings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PlusCircleIcon, Loader2, AlertCircle } from "lucide-react";
-import CircleIcon from '@mui/icons-material/Circle';
-import CloseIcon from '@mui/icons-material/Close';
+import CircleIcon from "@mui/icons-material/Circle";
+import CloseIcon from "@mui/icons-material/Close";
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
-
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 {
   /* Page Heading and Create Board Button */
@@ -82,24 +62,27 @@ export function BoardPageHeader({ cb }) {
     handleDialogClose();
   }
 
-  // loads randomly selected color on load
+  // sets random color on load
   useEffect(() => {
     setSelectedColor(colors[Math.floor(Math.random() * colors.length)].code);
   }, []);
 
   return (
     <div className="flex flex-row justify-between items-center">
+      {/* Page Heading */}
       <HeadingTwo text="Boards" />
 
       <div>
-        <Dialog open={isOpen} onChange={setIsOpen} >
+        <Dialog open={isOpen} onChange={setIsOpen}>
+          {/* Dialog Trigger for Open */}
           <Button onClick={() => setIsOpen(true)} type="button" variant="outline">
             <PlusCircleIcon />
             Create
           </Button>
 
+          {/* Actual Dialog Box */}
           <DialogContent className="sm:max-w-[425px] [&>button]:hidden">
-            {/* Custom Close Button */}
+            {/* Custom Close Dialog Button */}
             <div className="text-right absolute top-2 right-2">
               <Button size="icon" variant="ghost" onClick={handleDialogClose}>
                 <CloseIcon className="h-5 w-5" />
@@ -153,6 +136,7 @@ export function BoardPageHeader({ cb }) {
                     <SelectTrigger className="w-inherit">
                       <SelectValue placeholder="Select a color" />
                     </SelectTrigger>
+
                     <SelectContent>
                       <SelectGroup>
                         <SelectLabel>Available Colors:</SelectLabel>

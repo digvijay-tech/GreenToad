@@ -4,11 +4,17 @@ import { createClient } from "@/config/supabase/server";
 import { parseLogEntry } from "@/utils/format-utils/logs";
 
 
-// Inserts a new row into the boards table
+/**
+ * Creates a new board with the given name and background, and logs the action.
+ *
+ * @param {string} name - Name of the board.
+ * @param {string} background - Background for the board.
+ * @returns {Promise<Error | string>} - Success message or an Error object.
+**/
 export const createBoard = async (
     name: string,
     background: string,
-) => {
+): Promise<Error | string>=> {
     const supabase = await createClient();
 
     // getting user object from supabase for log entry
@@ -29,7 +35,7 @@ export const createBoard = async (
     }
 
     // inserting new board in boards table
-    const { data: BoardsArray, error: InsertionError } = await supabase
+    const { error: InsertionError } = await supabase
         .from("Boards")
         .insert({
             name: name,
@@ -43,26 +49,33 @@ export const createBoard = async (
         return new Error("Operation failed! try again later.");
     }
 
-    return BoardsArray;
+    return "Board created!";
 }
 
 
 
-// fetches the boards that matches with users id
-export const fetchBoards = async () => {
+/**
+ * Fetches all boards created by the authenticated user, ordered by creation date (newest first).
+ *
+ * @returns {Promise<unknown>} - An array of boards or an Error object if the operation fails.
+ *
+**/
+export const fetchBoards = async (): Promise<Error | unknown[]> => {
     const supabase = await createClient();
 
     // getting user object from supabase for log entry
     const user = await supabase.auth.getUser();
 
+    // if current session is lost
     if (!user.data.user) {
         return new Error("Authentication Failed! Please try again later.");
     }
 
+    // gets boards of current user in last created first order
     const { data, error } = await supabase.from("Boards")
         .select()
         .eq("ownerId", user.data.user.id)
-        .order("created_at", { ascending: false });
+        .order("updated_at", { ascending: false });
     
     if (error) {
         return new Error(error.message);
