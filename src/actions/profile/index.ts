@@ -34,6 +34,19 @@ export const getUserProfileAction = async (): Promise<unknown | null> => {
   return data;
 };
 
+
+/**
+ * Fetches the workspaces associated with the currently authenticated user from Supabase.
+ *
+ * This function first retrieves the currently authenticated user using `supabase.auth.getUser()`. 
+ * If there is an error fetching the user, it returns `null`. 
+ * Then, it queries the `workspaces` table in Supabase to fetch all workspaces where the `user_id` matches 
+ * the authenticated user's `id`. If there is an error during the workspace query, it also returns `null`.
+ * If both the user and workspace data are successfully retrieved, the function returns the list of workspaces.
+ *
+ * @returns {Promise<Workspace[] | null>} A promise that resolves to an array of workspaces if successful, 
+ * or `null` if an error occurs at any point in the process.
+**/
 export const getUserWorkspacesAction = async () => {
   const supabase = await createClient();
 

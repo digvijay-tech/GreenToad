@@ -1,5 +1,8 @@
 import { HeadingTwo } from "@/components/typography/headings";
 import { ResetPassword } from "./components/resetPassword";
+import { CreateWorkspace } from "./components/createWorkspace";
+import { ManageWorkspaces } from "./components/manageWorkspaces";
+
 
 export default function Settings() {
   return (
@@ -7,7 +10,19 @@ export default function Settings() {
       {/* Page Heading */}
       <HeadingTwo text="Settings" />
 
-      {/* Options */}
+      {/* Workspace Management */}
+      <div className="mt-5">
+        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-5 gap-4">
+            <div className="lg:col-span-3">
+                <CreateWorkspace />
+            </div>
+            <div className="lg:col-span-2">
+                <ManageWorkspaces />
+            </div>
+        </div>
+      </div>
+
+      {/* Password Reset */}
       <div className="mt-5">
         <ResetPassword />
       </div>

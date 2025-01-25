@@ -18,7 +18,6 @@ export function UserProfileProvider({ children }) {
   // storing received user object in context
   const getUser = async () => {
     if (!user) {
-      console.log("API Called `auth.users`!");
       const response = await getAuthenticatedUserAction();
 
       if (response) {
@@ -32,8 +31,6 @@ export function UserProfileProvider({ children }) {
   // storing received user profile object in context
   const getProfile = async () => {
     if (!profile) {
-      console.log("API Called `public.profiles`!");
-
       // handle api call
       const response = await getUserProfileAction();
 
@@ -46,8 +43,6 @@ export function UserProfileProvider({ children }) {
   // storing received user workspaces object in context
   const getWorkspaces = async () => {
     if (!workspaces) {
-      console.log("API Called `public.workspaces`!");
-
       // handles api call
       const response = await getUserWorkspacesAction();
 
