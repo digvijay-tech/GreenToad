@@ -1,9 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useState, useEffect } from "react";
 import { useUserProfileContext } from "@/contexts/profile/index";
 import { UserProfileType, WorkspaceType } from "@/contexts/profile/types";
+import { switchWorkspace } from "./actions";
+import { useToast } from "@/hooks/use-toast";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -17,8 +18,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 
+
+// Displays error messages in a toast
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const errorToast = (toast: any, message: string) => {
+  toast({
+    title: "Error",
+    description: message,
+    style: {
+      color: "#e74c3c",
+      textAlign: "justify",
+    },
+  });
+};
+
 export function WorksplaceSwitcher() {
-  const { profile, getProfile, workspaces, getWorkspaces } =
+  const { toast } = useToast();
+  const { profile, getProfile, workspaces, getWorkspaces, removeUserProfileContext } =
     useUserProfileContext();
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [selectedWorkspace, setSelectedWorkspace] =
@@ -26,6 +42,26 @@ export function WorksplaceSwitcher() {
   const [availableWorkspaces, setAvailableWorkspaces] = useState<
     WorkspaceType[] | null
   >(null);
+
+  // handle workspace switch
+  const handleWorkspaceSwitch = async (wsId: string) => {
+    try {
+      const result = await switchWorkspace(wsId);
+
+      if (result instanceof Error) {
+        throw result;
+      }
+
+      removeUserProfileContext();
+    } catch (e) {
+      if (e instanceof Error) {
+        errorToast(toast, e.message);
+      } else {
+        console.log(e);
+        errorToast(toast, "Something went wrong!");
+      }
+    }
+  }
 
   // on load and watch changes in profile and workspaces
   useEffect(() => {
@@ -83,7 +119,7 @@ export function WorksplaceSwitcher() {
               availableWorkspaces.map((wp) => (
                 <DropdownMenuItem
                   key={wp.id}
-                  onSelect={() => setSelectedWorkspace(wp)}
+                  onSelect={() => handleWorkspaceSwitch(wp.id)}
                 >
                   {wp.name}{" "}
                   {wp.id === userProfile.default_workspace_id && (

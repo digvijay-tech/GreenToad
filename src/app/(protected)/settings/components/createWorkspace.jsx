@@ -90,7 +90,7 @@ export function CreateWorkspace() {
     <Card className="shadow-none">
       <CardHeader>
         <CardTitle>Create Workspace</CardTitle>
-        <CardDescription>You can create upto 10 workspaces.</CardDescription>
+        <CardDescription>You can create up to 10 workspaces in total.</CardDescription>
         <Separator />
       </CardHeader>
       <CardContent>
