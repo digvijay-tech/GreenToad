@@ -36,7 +36,7 @@ import {
 export function SidebarUser({ name, email, imageUrl }) {
   const pathname = usePathname();
   const { isMobile } = useSidebar();
-  const { removeUser } = useUserProfileContext();
+  const { removeUserProfileContext } = useUserProfileContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogOut = async () => {
@@ -44,7 +44,7 @@ export function SidebarUser({ name, email, imageUrl }) {
     setIsLoading(true);
 
     // remove user state from User Profile context
-    removeUser();
+    removeUserProfileContext();
 
     // supabase signout action
     await signOutAction();

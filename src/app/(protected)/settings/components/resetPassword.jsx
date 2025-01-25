@@ -34,7 +34,7 @@ const errorToast = (toast, message) => {
 export function ResetPassword() {
   const router = useRouter();
   const { toast } = useToast();
-  const { user, getUser, removeUser } = useUserProfileContext();
+  const { user, getUser, removeUserProfileContext } = useUserProfileContext();
   const [isEmailProvider, setIsEmailProvider] = useState(false);
   const [email, setEmail] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -83,7 +83,7 @@ export function ResetPassword() {
       }
 
       // on success, remove user state and redirect to login
-      removeUser();
+      removeUserProfileContext();
 
       toast({
         title: "Success",

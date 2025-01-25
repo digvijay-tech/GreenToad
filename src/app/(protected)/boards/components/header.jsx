@@ -9,12 +9,25 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { PlusCircleIcon, Loader2, AlertCircle } from "lucide-react";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
-
 
 {
   /* Page Heading and Create Board Button */
@@ -32,7 +45,7 @@ export function BoardPageHeader({ cb }) {
     setBoardName("");
     setIsLoading(false);
     setIsOpen(false);
-  }
+  };
 
   const handleCreate = async (e) => {
     e.preventDefault();
@@ -40,7 +53,9 @@ export function BoardPageHeader({ cb }) {
 
     // validate name
     if (!isValidBoardName(boardName)) {
-      setError("The name must be between 2 and 36 characters in length. Please try again.");
+      setError(
+        "The name must be between 2 and 36 characters in length. Please try again.",
+      );
       setIsLoading(false);
       return;
     }
@@ -60,7 +75,7 @@ export function BoardPageHeader({ cb }) {
     // notify parent for successful insertion
     cb();
     handleDialogClose();
-  }
+  };
 
   // sets random color on load
   useEffect(() => {
@@ -75,7 +90,11 @@ export function BoardPageHeader({ cb }) {
       <div>
         <Dialog open={isOpen} onChange={setIsOpen}>
           {/* Dialog Trigger for Open */}
-          <Button onClick={() => setIsOpen(true)} type="button" variant="outline">
+          <Button
+            onClick={() => setIsOpen(true)}
+            type="button"
+            variant="outline"
+          >
             <PlusCircleIcon />
             Create
           </Button>
@@ -88,12 +107,10 @@ export function BoardPageHeader({ cb }) {
                 <CloseIcon className="h-5 w-5" />
               </Button>
             </div>
-            
+
             {/* Dialog Header with remaining board count */}
             <DialogHeader>
-              <DialogTitle>
-                Create New Board
-              </DialogTitle>
+              <DialogTitle>Create New Board</DialogTitle>
               <DialogDescription>
                 You have created 0 out of 3 boards.
               </DialogDescription>
@@ -104,9 +121,7 @@ export function BoardPageHeader({ cb }) {
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                  { error }
-                </AlertDescription>
+                <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
 
@@ -114,7 +129,7 @@ export function BoardPageHeader({ cb }) {
               <form onSubmit={handleCreate}>
                 <div>
                   <Label htmlFor="nameInput">Enter Board Name</Label>
-                  <Input 
+                  <Input
                     id="nameInput"
                     type="text"
                     value={boardName}
@@ -141,15 +156,15 @@ export function BoardPageHeader({ cb }) {
                       <SelectGroup>
                         <SelectLabel>Available Colors:</SelectLabel>
                         {colors.map((c, i) => (
-                          <SelectItem 
-                            key={i}
-                            value={c.code}
-                            >
-                              <span className="flex items-center">
-                                <CircleIcon className="mr-4" style={{ color: c.code }} />
-                                { c.label }
-                              </span>
-                            </SelectItem>
+                          <SelectItem key={i} value={c.code}>
+                            <span className="flex items-center">
+                              <CircleIcon
+                                className="mr-4"
+                                style={{ color: c.code }}
+                              />
+                              {c.label}
+                            </span>
+                          </SelectItem>
                         ))}
                       </SelectGroup>
                     </SelectContent>

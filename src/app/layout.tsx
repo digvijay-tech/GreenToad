@@ -19,9 +19,7 @@ export default function RootLayout({
         {/* User Profile Context */}
         <UserProfileProvider>
           {/* All Other Pages and Components */}
-          <main>
-            {children}
-          </main>
+          <main>{children}</main>
         </UserProfileProvider>
 
         {/* Globally Placed Toast Element */}

@@ -4,8 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import LockIcon from '@mui/icons-material/Lock';
-
+import LockIcon from "@mui/icons-material/Lock";
 
 export function BoardsList({ data }) {
   const [searchInput, setSearchInput] = useState("");
@@ -32,7 +31,6 @@ export function BoardsList({ data }) {
     setBoards(data);
     setMatchedBoards(data);
   }, [data]);
-
 
   return (
     <div>
@@ -78,7 +76,9 @@ export function BoardsList({ data }) {
 
                 {/* Displaying Lock Icon if the board is marked as closed */}
                 <div className="flex flex-row justify-end">
-                  {board.isClosed && <LockIcon className="h-3 w-3 opacity-90" />}
+                  {board.isClosed && (
+                    <LockIcon className="h-3 w-3 opacity-90" />
+                  )}
                 </div>
               </div>
             </Link>

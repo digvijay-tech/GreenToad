@@ -6,7 +6,6 @@ import { useToast } from "@/hooks/use-toast";
 import { BoardPageHeader } from "./components/header";
 import { BoardsList } from "./components/boardlist";
 
-
 // Displays error messages in a toast
 const errorToast = (toast, message) => {
   toast({
@@ -26,7 +25,7 @@ export default function Boards() {
   // handle callback from BoardPageHeader component when new board is created
   // and fetch new state
   const handleCreateCallback = () => {
-    (async function() {
+    (async function () {
       const result = await fetchBoards();
 
       if (result instanceof Error) {
@@ -35,10 +34,10 @@ export default function Boards() {
 
       setBoards(result);
     })();
-  }
+  };
 
   useEffect(() => {
-    (async function() {
+    (async function () {
       const result = await fetchBoards();
 
       if (result instanceof Error) {

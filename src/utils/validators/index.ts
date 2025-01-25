@@ -7,7 +7,10 @@ import {
   PASSWORD_MIN_NUMS,
   PASSWORD_MIN_SYMBOLS,
 } from "@/utils/constants/password";
-import { MAX_BOARD_NAME_LEN, MIN_BOARD_NAME_LEN, } from "@/utils/constants/board";
+import {
+  MAX_BOARD_NAME_LEN,
+  MIN_BOARD_NAME_LEN,
+} from "@/utils/constants/board";
 
 // Function to validate a password
 // @param input: string - The password to validate
@@ -24,12 +27,12 @@ export const isValidPassword = (input: string): boolean => {
   return isStrongPassword(input, options);
 };
 
-
 // Function to validate board name length
 // @param input: string - The board name
 // @returns: boolean - Whether the length meets the criteria
 export const isValidBoardName = (input: string): boolean => {
-  if (input.length > MAX_BOARD_NAME_LEN || input.length < MIN_BOARD_NAME_LEN) return false;
+  if (input.length > MAX_BOARD_NAME_LEN || input.length < MIN_BOARD_NAME_LEN)
+    return false;
 
   return true;
-}
+};

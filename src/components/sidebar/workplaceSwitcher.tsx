@@ -1,6 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useUserProfileContext } from "@/contexts/profile/index";
+import { UserProfileType, WorkspaceType } from "@/contexts/profile/types";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -15,7 +18,34 @@ import {
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 
 export function WorksplaceSwitcher() {
-  const [selectedWorkplace, setSelectedWorkplace] = useState("Personal");
+  const { profile, getProfile, workspaces, getWorkspaces } =
+    useUserProfileContext();
+  const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
+  const [selectedWorkspace, setSelectedWorkspace] =
+    useState<WorkspaceType | null>(null);
+  const [availableWorkspaces, setAvailableWorkspaces] = useState<
+    WorkspaceType[] | null
+  >(null);
+
+  // on load and watch changes in profile and workspaces
+  useEffect(() => {
+    (async function () {
+      await getProfile();
+      await getWorkspaces();
+    })();
+
+    setUserProfile(profile);
+    setAvailableWorkspaces(workspaces);
+
+    // find and set the current workspace set by user
+    if (workspaces) {
+      workspaces.forEach((ws: WorkspaceType) => {
+        if (profile.default_workspace_id === ws.id) {
+          setSelectedWorkspace(ws);
+        }
+      });
+    }
+  }, [profile, getProfile, workspaces, getWorkspaces]);
 
   return (
     <SidebarMenu>
@@ -34,11 +64,11 @@ export function WorksplaceSwitcher() {
 
                 {/* Truncates the extra text */}
                 <span>
-                  {selectedWorkplace &&
-                  typeof selectedWorkplace === "string" &&
-                  selectedWorkplace.length > 20
-                    ? selectedWorkplace.slice(0, 20) + ".."
-                    : selectedWorkplace}
+                  {selectedWorkspace &&
+                  typeof selectedWorkspace.name === "string" &&
+                  selectedWorkspace.name.length > 20
+                    ? selectedWorkspace.name.slice(0, 20) + ".."
+                    : selectedWorkspace?.name}
                 </span>
               </div>
               <ChevronsUpDown className="ml-auto" />
@@ -48,17 +78,19 @@ export function WorksplaceSwitcher() {
             className="w-[--radix-dropdown-menu-trigger-width]"
             align="start"
           >
-            {["Personal", "Google LLC", "University of East London"].map(
-              (wp, index) => (
+            {userProfile &&
+              availableWorkspaces &&
+              availableWorkspaces.map((wp) => (
                 <DropdownMenuItem
-                  key={index}
-                  onSelect={() => setSelectedWorkplace(wp)}
+                  key={wp.id}
+                  onSelect={() => setSelectedWorkspace(wp)}
                 >
-                  {wp}{" "}
-                  {wp === selectedWorkplace && <Check className="ml-auto" />}
+                  {wp.name}{" "}
+                  {wp.id === userProfile.default_workspace_id && (
+                    <Check className="ml-auto" />
+                  )}
                 </DropdownMenuItem>
-              ),
-            )}
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
