@@ -4,7 +4,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { useAccountContext } from "@/contexts/account/index";
+import { useUserProfileContext } from "@/contexts/profile/index";
 import { WorksplaceSwitcher } from "@/components/sidebar/workplaceSwitcher";
 import { SidebarUser } from "@/components/sidebar/sidebarUser";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -42,7 +42,7 @@ const links = [
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const { user, getUser } = useAccountContext();
+  const { user, getUser } = useUserProfileContext();
   const [name, setName] = useState(null);
   const [email, setEmail] = useState(null);
   const [pictureUrl, setPictureUrl] = useState(null);

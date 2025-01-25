@@ -1,4 +1,4 @@
-import { AccountProvider } from "@/contexts/account/index";
+import { UserProfileProvider } from "@/contexts/profile/index";
 import { Toaster } from "@/components/ui/toaster";
 import type { Metadata } from "next";
 import "./globals.css";
@@ -16,11 +16,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* User Account Context */}
-        <AccountProvider>
+        {/* User Profile Context */}
+        <UserProfileProvider>
           {/* All Other Pages and Components */}
-          <main>{children}</main>
-        </AccountProvider>
+          <main>
+            {children}
+          </main>
+        </UserProfileProvider>
 
         {/* Globally Placed Toast Element */}
         <Toaster />

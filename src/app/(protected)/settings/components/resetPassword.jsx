@@ -1,8 +1,8 @@
 "use client";
 
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useAccountContext } from "@/contexts/account";
+import { useUserProfileContext } from "@/contexts/profile/index";
 import { authenticateAndResetPassword } from "../actions/index";
 import { useToast } from "@/hooks/use-toast";
 import { isValidPassword } from "@/utils/validators/index";
@@ -32,8 +32,9 @@ const errorToast = (toast, message) => {
 };
 
 export function ResetPassword() {
+  const router = useRouter();
   const { toast } = useToast();
-  const { user, getUser, removeUser } = useAccountContext();
+  const { user, getUser, removeUser } = useUserProfileContext();
   const [isEmailProvider, setIsEmailProvider] = useState(false);
   const [email, setEmail] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -93,8 +94,10 @@ export function ResetPassword() {
         },
       });
 
-      redirect("/");
+      // redirecting user back to login page
+      router.push("/");
     } catch (e) {
+      console.log(e);
       if (!e.message) {
         errorToast(toast, "Something went wrong!");
       } else {

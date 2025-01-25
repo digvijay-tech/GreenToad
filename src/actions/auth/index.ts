@@ -4,7 +4,7 @@ import { encodedRedirect } from "@/config/utils";
 import { createClient } from "@/config/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { AuthError } from "@supabase/supabase-js";
+import { AuthError, User } from "@supabase/supabase-js";
 
 /**
  * Handles user signup by validating email and password, and interacting with Supabase to create a new user.
@@ -138,6 +138,28 @@ export const signOutAction = async (): Promise<void> => {
   await supabase.auth.signOut();
   return redirect("/");
 };
+
+/**
+ * Fetches the current authenticated user from Supabase.
+ *
+ * This function uses the `supabase.auth.getUser()` method to retrieve the user's data.
+ * It returns a `User` object if the user is authenticated, or `null` if no user is found
+ * or an error occurs.
+ *
+ * @returns {Promise<User | null>} The authenticated user object or null if there is no user or an error occurs.
+ **/
+export const getAuthenticatedUserAction = async (): Promise<User | null> => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    return null;
+  }
+
+  return data.user;
+};
+
 
 /**********************************************************************************
 ----------------------------- OAUTH SIGNIN ACTIONS --------------------------------

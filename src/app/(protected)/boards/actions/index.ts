@@ -36,17 +36,17 @@ export const createBoard = async (
 
     // inserting new board in boards table
     const { error: InsertionError } = await supabase
-        .from("Boards")
+        .from("boards")
         .insert({
             name: name,
             background: background,
             changes: [log],
-            ownerId: user.data.user.id
+            owner_id: user.data.user.id
         });
     
     // when insertion is failed
     if (InsertionError) {
-        return new Error("Operation failed! try again later.");
+        return new Error(InsertionError.message);
     }
 
     return "Board created!";
@@ -72,9 +72,9 @@ export const fetchBoards = async (): Promise<Error | unknown[]> => {
     }
 
     // gets boards of current user in last created first order
-    const { data, error } = await supabase.from("Boards")
+    const { data, error } = await supabase.from("boards")
         .select()
-        .eq("ownerId", user.data.user.id)
+        .eq("owner_id", user.data.user.id)
         .order("updated_at", { ascending: false });
     
     if (error) {
