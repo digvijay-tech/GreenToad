@@ -38,6 +38,8 @@ export function UserProfileProvider({ children }) {
         setProfile(response[0]);
       }
     }
+
+    return profile;
   };
 
   // storing received user workspaces object in context
@@ -50,6 +52,8 @@ export function UserProfileProvider({ children }) {
         setWorkspaces(response);
       }
     }
+
+    return workspaces;
   };
 
   // remove user state when logout happens
