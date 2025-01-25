@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useUserProfileContext } from "@/contexts/profile/index";
 import { fetchBoards } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import { BoardPageHeader } from "./components/header";
@@ -20,6 +21,7 @@ const errorToast = (toast, message) => {
 
 export default function Boards() {
   const { toast } = useToast();
+  const { workspaces } = useUserProfileContext();
   const [boards, setBoards] = useState(null);
 
   // handle callback from BoardPageHeader component when new board is created
@@ -46,7 +48,7 @@ export default function Boards() {
 
       setBoards(result);
     })();
-  }, []);
+  }, [workspaces]);
 
   return (
     <div className="mt-[60px] container mx-auto">

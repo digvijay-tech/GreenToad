@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
 
-
 // Displays error messages in a toast
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const errorToast = (toast: any, message: string) => {
@@ -34,8 +33,13 @@ const errorToast = (toast: any, message: string) => {
 
 export function WorksplaceSwitcher() {
   const { toast } = useToast();
-  const { profile, getProfile, workspaces, getWorkspaces, removeUserProfileContext } =
-    useUserProfileContext();
+  const {
+    profile,
+    getProfile,
+    workspaces,
+    getWorkspaces,
+    removeUserProfileContext,
+  } = useUserProfileContext();
   const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
   const [selectedWorkspace, setSelectedWorkspace] =
     useState<WorkspaceType | null>(null);
@@ -61,7 +65,7 @@ export function WorksplaceSwitcher() {
         errorToast(toast, "Something went wrong!");
       }
     }
-  }
+  };
 
   // on load and watch changes in profile and workspaces
   useEffect(() => {

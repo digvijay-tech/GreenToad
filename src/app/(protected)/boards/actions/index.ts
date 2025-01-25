@@ -13,18 +13,18 @@ import { parseLogEntry } from "@/utils/format-utils/logs";
 export const createBoard = async (
   name: string,
   background: string,
-): Promise<Error | string> => {
+): Promise<Error | null> => {
   const supabase = await createClient();
 
   // getting user object from supabase for log entry
-  const user = await supabase.auth.getUser();
+  const { data: authData, error: authError } = await supabase.auth.getUser();
 
-  if (!user.data.user) {
-    return new Error("Authentication Failed! Please try again later.");
+  if (authError) {
+    return new Error(authError.message);
   }
 
   // extracting user email/name (if available) from the user object
-  const userIdentifier = user.data.user.email;
+  const userIdentifier = authData.user.email;
 
   // parse log entry
   const log = parseLogEntry(
@@ -36,12 +36,23 @@ export const createBoard = async (
     return new Error(log.message);
   }
 
+  // getting workspace_id from user profile
+  const { data, error: queryError } = await supabase
+    .from("profiles")
+    .select()
+    .eq("id", authData.user.id);
+
+  if (queryError) {
+    return new Error(queryError.message);
+  }
+
   // inserting new board in boards table
   const { error: InsertionError } = await supabase.from("boards").insert({
     name: name,
     background: background,
     changes: [log],
-    owner_id: user.data.user.id,
+    owner_id: authData.user.id,
+    workspace_id: data[0].default_workspace_id,
   });
 
   // when insertion is failed
@@ -49,7 +60,7 @@ export const createBoard = async (
     return new Error(InsertionError.message);
   }
 
-  return "Board created!";
+  return null;
 };
 
 /**
@@ -61,24 +72,33 @@ export const createBoard = async (
 export const fetchBoards = async (): Promise<Error | unknown[]> => {
   const supabase = await createClient();
 
-  // getting user object from supabase for log entry
-  const user = await supabase.auth.getUser();
+  // getting user id
+  const { data: authData, error: authError } = await supabase.auth.getUser();
 
-  // if current session is lost
-  if (!user.data.user) {
-    return new Error("Authentication Failed! Please try again later.");
+  if (authError) {
+    return new Error(authError.message);
+  }
+
+  // getting workspace_id
+  const { data: queryData, error: queryError } = await supabase
+    .from("profiles")
+    .select()
+    .eq("id", authData.user.id);
+
+  if (queryError) {
+    return new Error(queryError.message);
   }
 
   // gets boards of current user in last created first order
-  const { data, error } = await supabase
+  const { data: boards, error } = await supabase
     .from("boards")
     .select()
-    .eq("owner_id", user.data.user.id)
+    .eq("workspace_id", queryData[0].default_workspace_id)
     .order("updated_at", { ascending: false });
 
   if (error) {
     return new Error(error.message);
   }
 
-  return data;
+  return boards;
 };
