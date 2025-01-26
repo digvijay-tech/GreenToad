@@ -81,6 +81,7 @@ export function UserProfileProvider({ children }) {
   );
 }
 
+// creates context hook
 export const useUserProfileContext = () => {
   return useContext(UserProfileContext);
 };
