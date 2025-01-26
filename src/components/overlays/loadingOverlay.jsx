@@ -16,8 +16,8 @@ const overlayStyles = {
 
 export function LoadingOverlay({ loadingText }) {
   return (
-    <div className="z-50 fixed top-0 bottom-0 left-0 right-0 bg-[#ffffff]">
-      <div style={overlayStyles}>
+    <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-[#ffffff]">
+      <div style={overlayStyles} className="z-50">
         <Loader2 className="animate-spin mx-auto my-3" size={45} />
 
         <p className="text-center text-xl text-slate-700">{loadingText}</p>

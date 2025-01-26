@@ -91,7 +91,7 @@ export function CreateWorkspace() {
       <CardHeader>
         <CardTitle>Create Workspace</CardTitle>
         <CardDescription>
-          You can create up to 10 workspaces in total.
+          You can create up to 4 workspaces in total.
         </CardDescription>
         <Separator />
       </CardHeader>
@@ -100,7 +100,7 @@ export function CreateWorkspace() {
           <div>
             <Label htmlFor="name">Enter Name</Label>
             <Input
-              type="name"
+              type="text"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}

@@ -12,6 +12,7 @@ export const protectedRoutes = new Set([
   "/account",
   "/notifications",
   "/settings",
+  "/settings/manage-workspaces",
 ]);
 
 // AUTH ROUTES

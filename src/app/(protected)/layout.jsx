@@ -18,7 +18,7 @@ export default function SideBarLayout({ children }) {
 
       {/* Main Content Section */}
       <SidebarInset>
-        <header className="flex fixed top-0 w-full bg-background h-16 shrink-0 items-center gap-2 border-b px-4">
+        <header className="flex fixed z-[5] top-0 w-full bg-[#ffffff] h-16 shrink-0 items-center gap-2 border-b px-4">
           <SidebarTrigger className="ml-1" />
 
           <div className="h-6">
