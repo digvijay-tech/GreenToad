@@ -51,7 +51,7 @@ export default function Boards() {
   }, [workspaces]);
 
   return (
-    <div className="mt-[60px] container mx-auto">
+    <div className="mt-[60px] container mx-auto p-4">
       {/* Page Heading and Create Board Button */}
       <BoardPageHeader cb={handleCreateCallback} />
 

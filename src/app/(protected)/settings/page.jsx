@@ -5,7 +5,7 @@ import { ManageWorkspacesButton } from "./components/manageWorkspaces";
 
 export default function Settings() {
   return (
-    <div className="mt-[60px] container mx-auto">
+    <div className="mt-[60px] container mx-auto p-4">
       {/* Page Heading */}
       <HeadingTwo text="Settings" />
 

@@ -51,7 +51,7 @@ export const createBoard = async (
     name: name,
     background: background,
     changes: [log],
-    owner_id: authData.user.id,
+    user_id: authData.user.id,
     workspace_id: data[0].default_workspace_id,
   });
 

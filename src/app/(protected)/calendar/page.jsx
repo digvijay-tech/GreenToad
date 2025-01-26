@@ -1,6 +1,6 @@
 export default function Calendar() {
   return (
-    <div className="mt-[60px]">
+    <div className="mt-[60px] p-4">
       <h2>Calendar</h2>
 
       {Array.from({ length: 100 }).map((v, i) => (

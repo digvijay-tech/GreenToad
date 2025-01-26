@@ -1,6 +1,6 @@
 export default function Account() {
   return (
-    <div className="mt-[60px]">
+    <div className="mt-[60px] p-4">
       <h2>Account</h2>
 
       {Array.from({ length: 100 }).map((v, i) => (

@@ -5,16 +5,15 @@ import { useUserProfileContext } from "@/contexts/profile";
 import { HeadingTwo } from "@/components/typography/headings";
 import { WorkspaceControlTile } from "./components/controlTile";
 
-
-
 export default function ManageWorkspaces() {
-  const { workspaces, getWorkspaces, profile, getProfile } = useUserProfileContext();
+  const { workspaces, getWorkspaces, profile, getProfile } =
+    useUserProfileContext();
   const [availableWorkspaces, setAvailableWorkspaces] = useState(null);
   const [userProfile, setUserProfile] = useState(null);
 
   // on load and workspace change
   useEffect(() => {
-    (async function() {
+    (async function () {
       const workspaceResult = await getWorkspaces();
       const profileResult = await getProfile();
 
@@ -26,12 +25,10 @@ export default function ManageWorkspaces() {
   }, [workspaces, profile]);
 
   return (
-    <div className="mt-[60px] container mx-auto">
+    <div className="mt-[60px] container mx-auto p-4">
       <HeadingTwo text="Manage Your Workspaces" />
 
-      {
-        (availableWorkspaces && userProfile)
-        ?
+      {availableWorkspaces && userProfile ? (
         <div className="mt-5">
           {availableWorkspaces.map((ws) => (
             <WorkspaceControlTile
@@ -44,11 +41,9 @@ export default function ManageWorkspaces() {
             />
           ))}
         </div>
-        :
-        <p className="text-center text-muted-foreground mt-6">
-          Loading..
-        </p>
-      }
+      ) : (
+        <p className="text-center text-muted-foreground mt-6">Loading..</p>
+      )}
     </div>
   );
 }
