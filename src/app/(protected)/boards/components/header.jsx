@@ -112,7 +112,7 @@ export function BoardPageHeader({ cb }) {
             <DialogHeader>
               <DialogTitle>Create New Board</DialogTitle>
               <DialogDescription>
-                You have created 0 out of 3 boards.
+                You can create upto 10 boards in this workspace.
               </DialogDescription>
             </DialogHeader>
 
@@ -141,7 +141,7 @@ export function BoardPageHeader({ cb }) {
                 </div>
 
                 <div className="mt-3">
-                  <Label htmlFor="bgInput">Choose Background</Label>
+                  <Label htmlFor="bgInput">Choose Cover</Label>
                   <Select
                     value={selectedColor}
                     onValueChange={setSelectedColor}

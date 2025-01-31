@@ -68,7 +68,7 @@ export const toggleIsClosedOption = async (
 
   const { error: updateError } = await supabase
     .from("boards")
-    .update({ is_closed: !isClosed })
+    .update({ is_closed: !isClosed, updated_at: new Date().toISOString() })
     .eq("workspace_id", workspaceId)
     .eq("id", boardId);
 
@@ -77,4 +77,34 @@ export const toggleIsClosedOption = async (
   }
 
   return "Board updated!";
+};
+
+/**
+ * Renames a board in a workspace.
+ *
+ * @param {string} newName - The new board name.
+ * @param {string} workspaceId - The workspace ID.
+ * @param {string} boardId - The board ID.
+ * @returns {Promise<Error | string>} - Success message or error.
+ *
+ **/
+export const renameBoard = async (
+  newName: string,
+  workspaceId: string,
+  boardId: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // Note: authentication is not required for now (will think about it later!)
+  // RLS on supabase is enable for UPDATE by authenticated user only.
+
+  const { error: updateError } = await supabase
+    .from("boards")
+    .update({ name: newName, updated_at: new Date().toISOString() })
+    .eq("workspace_id", workspaceId)
+    .eq("id", boardId);
+
+  if (updateError) return new Error(updateError.message);
+
+  return "Board renamed!";
 };

@@ -1,8 +1,11 @@
 "use client";
 
+import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { BoardType } from "../actions/types";
 import { toggleIsClosedOption } from "../actions";
+import { RenameDialog } from "./renameDialog";
+import { successToast, errorToast } from "@/utils/toasts";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,32 +24,6 @@ import PeopleIcon from "@mui/icons-material/People";
 import BrowseGalleryIcon from "@mui/icons-material/BrowseGallery";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-// Displays error messages in a toast
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const errorToast = (toast: any, message: string) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
-
-// Displays success messages in a toast
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const successToast = (toast: any, message: string) => {
-  toast({
-    title: "Success",
-    description: message,
-    style: {
-      color: "#2ecc71",
-      textAlign: "justify",
-    },
-  });
-};
-
 export function BoardHeader({
   board,
   workspaceId,
@@ -57,6 +34,8 @@ export function BoardHeader({
   cb: () => void;
 }) {
   const { toast } = useToast();
+  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
 
   // toggle isClosed option
   const handleIsCloseToggle = async () => {
@@ -77,7 +56,17 @@ export function BoardHeader({
   };
 
   return (
-    <div className="">
+    <div>
+      {/* Rename Board Dialog */}
+      <RenameDialog
+        boardId={board.id}
+        workspaceId={workspaceId}
+        boardName={board.name}
+        open={isRenameOpen}
+        setOpen={setIsRenameOpen}
+        cb={cb}
+      />
+
       <div className="flex flex-row items-center justify-between">
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight select-none">
           {board.name}{" "}
@@ -88,20 +77,23 @@ export function BoardHeader({
           )}
         </h4>
 
-        <DropdownMenu>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertIcon className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56">
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => setIsRenameOpen(true)}
+              className="cursor-pointer"
+            >
               <BorderColorIcon className="h-4 w-4" />
               Rename
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer">
               <ColorLensIcon className="h-4 w-4" />
-              Change Background
+              Change Cover
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={handleIsCloseToggle}
