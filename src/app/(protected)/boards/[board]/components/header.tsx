@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { BoardType } from "../actions/types";
+import { BoardChangesType, BoardType } from "../actions/types";
 import { toggleIsClosedOption } from "../actions";
 import { RenameDialog } from "./renameDialog";
 import { DeleteDialog } from "./deleteDialog";
+import { ChangesDialog } from "./changesDialog";
 import { successToast, errorToast } from "@/utils/toasts";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -21,7 +22,6 @@ import ColorLensIcon from "@mui/icons-material/ColorLens";
 import LockIcon from "@mui/icons-material/Lock";
 import NoEncryptionGmailerrorredIcon from "@mui/icons-material/NoEncryptionGmailerrorred";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import PeopleIcon from "@mui/icons-material/People";
 import BrowseGalleryIcon from "@mui/icons-material/BrowseGallery";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -37,6 +37,7 @@ export function BoardHeader({
   const { toast } = useToast();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
+  const [isChangesOpen, setIsChangesOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   // toggle isClosed option
@@ -67,6 +68,13 @@ export function BoardHeader({
         open={isRenameOpen}
         setOpen={setIsRenameOpen}
         cb={cb}
+      />
+
+      {/* Board Changes Dialog */}
+      <ChangesDialog
+        open={isChangesOpen}
+        setOpen={setIsChangesOpen}
+        changes={board.changes as unknown as BoardChangesType[]}
       />
 
       {/* Delete Board Dialog */}
@@ -115,13 +123,12 @@ export function BoardHeader({
               {!board.is_closed && <LockIcon className="h-4 w-4" />}
               {board.is_closed ? "Open Board" : "Close Board"}
             </DropdownMenuItem>
-            <DropdownMenuItem disabled className="cursor-pointer">
-              <PeopleIcon className="h-4 w-4" />
-              Members
-            </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => setIsChangesOpen(true)}
+              className="cursor-pointer"
+            >
               <BrowseGalleryIcon className="h-4 w-4" />
-              View Changes
+              Changes
             </DropdownMenuItem>
 
             <DropdownMenuSeparator />

@@ -23,14 +23,8 @@ export const createBoard = async (
     return new Error(authError.message);
   }
 
-  // extracting user email/name (if available) from the user object
-  const userIdentifier = authData.user.email;
-
-  // parse log entry
-  const log = parseLogEntry(
-    "Board Created",
-    `Owner (${userIdentifier}) created this board.`,
-  );
+  // create log entry
+  const log = parseLogEntry("Board Created", `Owner created this board.`);
 
   if (log instanceof Error) {
     return new Error(log.message);

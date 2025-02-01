@@ -12,3 +12,9 @@ export interface BoardType {
   created_at: string;
   updated_at: string;
 }
+
+export interface BoardChangesType {
+  label: string;
+  description: string;
+  timestamp: string;
+}

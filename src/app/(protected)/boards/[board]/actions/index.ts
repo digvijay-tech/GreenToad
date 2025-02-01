@@ -2,6 +2,7 @@
 
 import { createClient } from "@/config/supabase/server";
 import { BoardType } from "./types";
+import { parseLogEntry } from "@/utils/format-utils/logs";
 
 /**
  * Fetches a board by its ID within a specific workspace.
@@ -66,9 +67,13 @@ export const toggleIsClosedOption = async (
 
   // Note: authentication is not required for now (will think about it later!)
 
+  // update the board
   const { error: updateError } = await supabase
     .from("boards")
-    .update({ is_closed: !isClosed, updated_at: new Date().toISOString() })
+    .update({
+      is_closed: !isClosed,
+      updated_at: new Date().toISOString(),
+    })
     .eq("workspace_id", workspaceId)
     .eq("id", boardId);
 
@@ -80,7 +85,7 @@ export const toggleIsClosedOption = async (
 };
 
 /**
- * Renames a board in a workspace.
+ * Renames a board in a workspace and record the change.
  *
  * @param {string} newName - The new board name.
  * @param {string} workspaceId - The workspace ID.
@@ -98,9 +103,39 @@ export const renameBoard = async (
   // Note: authentication is not required for now (will think about it later!)
   // RLS on supabase is enable for UPDATE by authenticated user only.
 
+  // create new log entry
+  const log = parseLogEntry(
+    "Board Renamed",
+    `Owner changed board name to ${newName}.`,
+  );
+
+  if (log instanceof Error) {
+    return new Error(log.message);
+  }
+
+  // getting previous changes array because there isn't a way to append to jsonb[] in supabase directly!
+  const { data: queryData, error: queryError } = await supabase
+    .from("boards")
+    .select("changes")
+    .eq("workspace_id", workspaceId)
+    .eq("id", boardId)
+    .single();
+
+  if (queryError) {
+    return new Error("Logging failed, please try again later!");
+  }
+
+  // extracting the current changes (if any) and appending the new log entry
+  const currentChanges = queryData?.changes || []; // ensure it's an empty array if no changes exist
+
+  // updating board name and logging new change
   const { error: updateError } = await supabase
     .from("boards")
-    .update({ name: newName, updated_at: new Date().toISOString() })
+    .update({
+      name: newName,
+      updated_at: new Date().toISOString(),
+      changes: [log, ...currentChanges], // appending new log entry
+    })
     .eq("workspace_id", workspaceId)
     .eq("id", boardId);
 
