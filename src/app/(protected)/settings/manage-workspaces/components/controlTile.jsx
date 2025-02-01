@@ -6,33 +6,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { renameWorkspaceAction } from "../actions";
 import { DeleteWorkspaceButton } from "./deleteWorkspace";
+import { successToast, errorToast } from "@/utils/toasts";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-// Displays error messages in a toast
-const errorToast = (toast, message) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
-
-// Displays success messages in a toast
-const successToast = (toast, message) => {
-  toast({
-    title: "Success",
-    description: message,
-    style: {
-      color: "#2ecc71",
-      textAlign: "justify",
-    },
-  });
-};
 
 export function WorkspaceControlTile({
   id,

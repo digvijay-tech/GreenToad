@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createWorkspace } from "../actions/index";
 import { useUserProfileContext } from "@/contexts/profile/index";
+import { successToast, errorToast } from "@/utils/toasts/index";
 import {
   Card,
   CardHeader,
@@ -16,30 +17,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-
-// Displays error messages in a toast
-const errorToast = (toast, message) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
-
-// Displays success messages in a toast
-const successToast = (toast, message) => {
-  toast({
-    title: "Success",
-    description: message,
-    style: {
-      color: "#2ecc71",
-      textAlign: "justify",
-    },
-  });
-};
 
 export function CreateWorkspace() {
   const { toast } = useToast();

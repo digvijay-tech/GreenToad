@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { deleteWorkspaceAction } from "../actions/index";
+import { successToast, errorToast } from "@/utils/toasts";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -16,30 +17,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
-
-// Displays error messages in a toast
-const errorToast = (toast, message) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
-
-// Displays success messages in a toast
-const successToast = (toast, message) => {
-  toast({
-    title: "Success",
-    description: message,
-    style: {
-      color: "#2ecc71",
-      textAlign: "justify",
-    },
-  });
-};
 
 export function DeleteWorkspaceButton({ workspaceId }) {
   const { toast } = useToast();

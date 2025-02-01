@@ -5,6 +5,7 @@ import { useUserProfileContext } from "@/contexts/profile/index";
 import { UserProfileType, WorkspaceType } from "@/contexts/profile/types";
 import { switchWorkspace } from "./actions";
 import { useToast } from "@/hooks/use-toast";
+import { errorToast } from "@/utils/toasts";
 import {
   SidebarMenu,
   SidebarMenuButton,
@@ -17,19 +18,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronsUpDown, GalleryVerticalEnd } from "lucide-react";
-
-// Displays error messages in a toast
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const errorToast = (toast: any, message: string) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
 
 export function WorksplaceSwitcher() {
   const { toast } = useToast();

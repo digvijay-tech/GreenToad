@@ -6,18 +6,7 @@ import { fetchBoards } from "./actions";
 import { useToast } from "@/hooks/use-toast";
 import { BoardPageHeader } from "./components/header";
 import { BoardsList } from "./components/boardlist";
-
-// Displays error messages in a toast
-const errorToast = (toast, message) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
+import { errorToast } from "@/utils/toasts";
 
 export default function Boards() {
   const { toast } = useToast();

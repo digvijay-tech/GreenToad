@@ -6,6 +6,7 @@ import { useUserProfileContext } from "@/contexts/profile/index";
 import { authenticateAndResetPassword } from "../actions/index";
 import { useToast } from "@/hooks/use-toast";
 import { isValidPassword } from "@/utils/validators/index";
+import { errorToast } from "@/utils/toasts";
 import {
   Card,
   CardHeader,
@@ -18,18 +19,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
-
-// Displays error messages in a toast
-const errorToast = (toast, message) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
 
 export function ResetPassword() {
   const router = useRouter();

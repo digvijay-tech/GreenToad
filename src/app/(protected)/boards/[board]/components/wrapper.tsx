@@ -7,19 +7,7 @@ import { UserProfileType } from "@/contexts/profile/types";
 import { BoardType } from "../actions/types";
 import { getBoardById } from "../actions";
 import { BoardHeader } from "./header";
-
-// Displays error messages in a toast
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const errorToast = (toast: any, message: string) => {
-  toast({
-    title: "Error",
-    description: message,
-    style: {
-      color: "#e74c3c",
-      textAlign: "justify",
-    },
-  });
-};
+import { errorToast } from "@/utils/toasts";
 
 export function BoardPageWrapper({ boardId }: { boardId: string }) {
   const { toast } = useToast();
