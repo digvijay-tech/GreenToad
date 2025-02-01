@@ -108,3 +108,37 @@ export const renameBoard = async (
 
   return "Board renamed!";
 };
+
+/**
+ * Deletes a board from a workspace.
+ *
+ * @param {string} boardId - The ID of the board to delete.
+ * @param {string} workspaceId - The ID of the workspace the board belongs to.
+ * @returns {Promise<Error | string>} - A success message if deleted, or an error if the operation fails.
+ **/
+export const deleteBoardById = async (
+  boardId: string,
+  workspaceId: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // authenticate and get user id
+  const { error: authError } = await supabase.auth.getUser();
+
+  if (authError) {
+    return new Error(authError.message);
+  }
+
+  // attempt to deletion
+  const { error: deletionError } = await supabase
+    .from("boards")
+    .delete()
+    .eq("id", boardId)
+    .eq("workspace_id", workspaceId);
+
+  if (deletionError) {
+    return new Error(deletionError.message);
+  }
+
+  return "Board deleted!";
+};

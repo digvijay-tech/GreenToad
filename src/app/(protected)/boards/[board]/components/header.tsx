@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { BoardType } from "../actions/types";
 import { toggleIsClosedOption } from "../actions";
 import { RenameDialog } from "./renameDialog";
+import { DeleteDialog } from "./deleteDialog";
 import { successToast, errorToast } from "@/utils/toasts";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,7 @@ export function BoardHeader({
   const { toast } = useToast();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
   // toggle isClosed option
   const handleIsCloseToggle = async () => {
@@ -65,6 +67,14 @@ export function BoardHeader({
         open={isRenameOpen}
         setOpen={setIsRenameOpen}
         cb={cb}
+      />
+
+      {/* Delete Board Dialog */}
+      <DeleteDialog
+        open={isDeleteOpen}
+        setOpen={setIsDeleteOpen}
+        boardId={board.id}
+        workspaceId={workspaceId}
       />
 
       <div className="flex flex-row items-center justify-between">
@@ -119,6 +129,7 @@ export function BoardHeader({
             <DropdownMenuItem
               disabled={!board.is_closed}
               className="cursor-pointer text-white focus:text-white bg-red-500 focus:bg-red-500 focus:opacity-[.93]"
+              onClick={() => setIsDeleteOpen(true)}
             >
               <DeleteIcon className="h-4 w-4" />
               Delete Board
