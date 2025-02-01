@@ -10,6 +10,7 @@ export const successToast = (toast: any, message: string) => {
       color: "#2ecc71",
       textAlign: "justify",
     },
+    duration: 1000,
   });
 };
 
@@ -23,5 +24,6 @@ export const errorToast = (toast: any, message: string) => {
       color: "#e74c3c",
       textAlign: "justify",
     },
+    duration: 2500,
   });
 };
