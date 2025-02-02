@@ -2,11 +2,12 @@
 
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { BoardDeckType } from "../actions/types";
 
 // Deck Component will work as Sortable Item
-export function Deck({ sortableId }: { sortableId: number }) {
+export function Deck(deck: BoardDeckType) {
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: sortableId });
+    useSortable({ id: deck.id });
   const style = { transform: CSS.Transform.toString(transform), transition };
 
   return (
@@ -17,7 +18,7 @@ export function Deck({ sortableId }: { sortableId: number }) {
       {...attributes}
       {...listeners}
     >
-      <p>Hello GreenToad! {sortableId}</p>
+      <p>{deck.name}</p>
     </div>
   );
 }

@@ -21,9 +21,10 @@ import { PlusCircle, Loader2 } from "lucide-react";
 interface CreateDeckProps {
   workspaceId: string;
   boardId: string;
+  cb: () => Promise<void>;
 }
 
-export function CreateDeck({ workspaceId, boardId }: CreateDeckProps) {
+export function CreateDeck({ workspaceId, boardId, cb }: CreateDeckProps) {
   const { toast } = useToast();
   const [open, setOpen] = useState<boolean>(false);
   const [name, setName] = useState<string>("");
@@ -56,9 +57,9 @@ export function CreateDeck({ workspaceId, boardId }: CreateDeckProps) {
       return;
     }
 
-    // handle api call
     successToast(toast, result);
     removeStateAndClose();
+    cb(); // will trigger refetch in `deckList.tsx`
   };
 
   return (

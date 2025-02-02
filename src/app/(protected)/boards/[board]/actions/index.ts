@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/config/supabase/server";
-import { BoardType } from "./types";
+import { BoardType, BoardDeckType } from "./types";
 import { parseLogEntry } from "@/utils/format-utils/logs";
 
 /**
@@ -263,4 +263,76 @@ export const createDeck = async (
   }
 
   return "Deck created!";
+};
+
+/**
+ * Fetches all decks associated with a specific board and workspace from Supabase.
+ *
+ * @param {string} boardId - The ID of the board to fetch decks for.
+ * @param {string} workspaceId - The ID of the workspace to fetch decks from.
+ *
+ * @returns {Promise<Error | BoardDeckType[]>} A Promise that resolves with an array of decks for the specified board and workspace,
+ *    or an Error if there is an issue with the query.
+ *
+ * This function interacts with the Supabase database using the RLS (Row-Level Security) policy.
+ * Authentication is not required since RLS SELECT policies are configured on the database to allow safe access.
+ * If there is an issue during the query execution (e.g., network error or query failure), an Error object is returned.
+ */
+export const fetchDecksByBoardId = async (
+  boardId: string,
+  workspaceId: string,
+): Promise<Error | BoardDeckType[]> => {
+  const supabase = await createClient();
+
+  // Note: Authentication is not required as RLS SELECT Policy is setup on SupaBase.
+
+  const { data: queryData, error: queryError } = await supabase
+    .from("decks")
+    .select()
+    .eq("board_id", boardId)
+    .eq("workspace_id", workspaceId)
+    .order("order", { ascending: true });
+
+  if (queryError) {
+    return new Error(queryError.message);
+  }
+
+  return queryData;
+};
+
+/**
+ * Updates the order of decks in the database by either updating existing records or inserting new ones if they don't exist.
+ *
+ * @param {BoardDeckType[]} decks - An array of decks to update or insert in the database. Each deck must contain the necessary fields such as `id`, `name`, `order`, etc.
+ *
+ * @returns {Promise<Error | null>} A Promise that resolves to `null` if the update was successful, or an `Error` if there was an issue with the operation.
+ *
+ * This function uses the Supabase `upsert` operation to update the `decks` table. If a deck with the same `id` already exists, it will be updated with the new values (e.g., `order`, `name`). If no matching record is found, a new deck is inserted.
+ * The `onConflict: "id"` option ensures that the `id` field is used to detect conflicts (i.e., it updates existing records with matching IDs).
+ **/
+export const updateDeckOrder = async (
+  decks: BoardDeckType[],
+): Promise<Error | null> => {
+  const supabase = await createClient();
+
+  const updates = decks.map((deck) => ({
+    id: deck.id,
+    name: deck.name,
+    order: deck.order,
+    board_id: deck.board_id,
+    user_id: deck.user_id,
+    workspace_id: deck.workspace_id,
+    created_at: deck.created_at,
+    updated_at: deck.updated_at,
+  }));
+
+  const { error } = await supabase
+    .from("decks")
+    .upsert(updates, { onConflict: "id" });
+
+  if (error) {
+    return new Error(error.message);
+  }
+
+  return null;
 };

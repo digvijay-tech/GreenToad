@@ -60,7 +60,7 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
         </div>
       ) : (
         <div className="px-4">
-          <p>Loading..</p>
+          <p>Loading Header..</p>
         </div>
       )}
 
@@ -72,7 +72,7 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
             boardId={board.id}
           />
         ) : (
-          <p className="">Loading..</p>
+          <p className="">Loading.. Wrapper body</p>
         )}
       </div>
     </div>

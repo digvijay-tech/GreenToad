@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { Deck } from "./deck";
+import { CreateDeck } from "./createDeck";
+import { fetchDecksByBoardId, updateDeckOrder } from "../actions";
+import { BoardDeckType } from "../actions/types";
+import { errorToast } from "@/utils/toasts";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {
   DndContext,
   closestCenter,
@@ -8,6 +15,7 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
+  TouchSensor,
 } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -15,9 +23,6 @@ import {
   sortableKeyboardCoordinates,
   horizontalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Deck } from "./deck";
-import { CreateDeck } from "./createDeck";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface DeckListProps {
   workspaceId: string;
@@ -25,46 +30,90 @@ interface DeckListProps {
 }
 
 export function DeckList({ workspaceId, boardId }: DeckListProps) {
-  const [isClient, setIsClient] = useState(false);
-  const [decks, setDecks] = useState<number[]>([1, 2]);
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [decks, setDecks] = useState<BoardDeckType[]>([]);
+  const updatedDecksRef = useRef<BoardDeckType[]>([]); // tracks updated decks
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
+    useSensor(TouchSensor),
   );
 
+  // DnD-Kit Drag handler
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleDragEnd = (e: { active: any; over: any }) => {
     const { active, over } = e;
 
-    if (active.id !== over.id) {
-      setDecks((items) => {
-        const oldIndex = items.indexOf(active.id);
-        const newIndex = items.indexOf(over.id);
+    if (!over || active.id === over.id) return;
 
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+    setDecks((prevDecks) => {
+      if (!prevDecks) return prevDecks;
+
+      // find old index and new index based on `order`
+      const oldIndex = prevDecks.findIndex((deck) => deck.id === active.id);
+      const newIndex = prevDecks.findIndex((deck) => deck.id === over.id);
+
+      // reorder array
+      const newDecks = arrayMove(prevDecks, oldIndex, newIndex);
+
+      // reassign `order` values to reflect the new order
+      const updatedDecks = newDecks.map((deck, i) => ({
+        ...deck,
+        order: i + 1, // assigning new order
+      }));
+
+      // Store the updated deck order in the ref (not in state)
+      updatedDecksRef.current = updatedDecks;
+
+      return updatedDecks;
+    });
   };
 
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
+  // reusable function fetch and refresh the decks on state change
+  const fetchAndLoadDecks = async () => {
+    setIsLoading(true);
 
-  if (!isClient) {
+    const result = await fetchDecksByBoardId(boardId, workspaceId);
+
+    if (result instanceof Error) {
+      errorToast(toast, result.message);
+      setIsLoading(false);
+      return;
+    }
+
+    setDecks(result);
+    setIsLoading(false);
+  };
+
+  // on changes in deck order
+  useEffect(() => {
+    (async function () {
+      if (updatedDecksRef.current.length > 0) {
+        const result = await updateDeckOrder(updatedDecksRef.current);
+
+        if (result instanceof Error) {
+          errorToast(toast, "Failed to update deck order.");
+        }
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [decks]);
+
+  // on load
+  useEffect(() => {
+    (async function () {
+      await fetchAndLoadDecks();
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [boardId, workspaceId]);
+
+  if (isLoading) {
     return (
-      <div className="h-full flex">
-        <ScrollArea className="h-full flex-1 w-1 border border-red-400">
-          <div className="flex h-[calc(100vh-118px)] space-x-3 mx-2">
-            {decks.map((id) => (
-              <div key={id} className="w-[320px] h-full border">
-                <p>Hello GreenToad! {id}</p>
-              </div>
-            ))}
-          </div>
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
+      <div className="">
+        <p className="">Loading.. Deck List</p>
       </div>
     );
   }
@@ -80,20 +129,22 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
             onDragEnd={handleDragEnd}
           >
             <SortableContext
-              items={decks}
+              items={decks ? decks.map((deck) => deck.id) : []}
               strategy={horizontalListSortingStrategy}
             >
-              {decks.map((id) => (
-                <Deck key={id} sortableId={id} />
-              ))}
+              {decks && decks.map((deck) => <Deck key={deck.id} {...deck} />)}
             </SortableContext>
-
-            <ScrollBar orientation="horizontal" />
           </DndContext>
 
           {/* CREATE NEW DECK SECTION */}
-          <CreateDeck workspaceId={workspaceId} boardId={boardId} />
+          <CreateDeck
+            workspaceId={workspaceId}
+            boardId={boardId}
+            cb={fetchAndLoadDecks}
+          />
         </div>
+
+        <ScrollBar orientation="horizontal" />
       </ScrollArea>
     </div>
   );

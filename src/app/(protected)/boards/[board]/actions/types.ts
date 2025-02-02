@@ -18,3 +18,14 @@ export interface BoardChangesType {
   description: string;
   timestamp: string;
 }
+
+export interface BoardDeckType {
+  id: string;
+  board_id: string;
+  user_id: string;
+  workspace_id: string;
+  name: string;
+  order: number;
+  created_at: string;
+  updated_at: string;
+}
