@@ -14,3 +14,9 @@ export const colors = [
   { label: "Black", code: "#1e272e" },
   { label: "DARKGREY", code: "#485460" },
 ];
+
+// Color Type
+export interface ColorType {
+  label: string;
+  code: string;
+}

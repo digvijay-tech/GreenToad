@@ -7,6 +7,7 @@ import { toggleIsClosedOption } from "../actions";
 import { RenameDialog } from "./renameDialog";
 import { DeleteDialog } from "./deleteDialog";
 import { ChangesDialog } from "./changesDialog";
+import { ChangeCoverDialog } from "./changeCoverDialog";
 import { successToast, errorToast } from "@/utils/toasts";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ export function BoardHeader({
   const { toast } = useToast();
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
+  const [isChangeCoverOpen, setIsChangeCoverOpen] = useState<boolean>(false);
   const [isChangesOpen, setIsChangesOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
 
@@ -68,6 +70,15 @@ export function BoardHeader({
         open={isRenameOpen}
         setOpen={setIsRenameOpen}
         cb={cb}
+      />
+
+      {/* Change Cover Dialog */}
+      <ChangeCoverDialog
+        open={isChangeCoverOpen}
+        setOpen={setIsChangeCoverOpen}
+        background={board.background}
+        boardId={board.id}
+        workspaceId={workspaceId}
       />
 
       {/* Board Changes Dialog */}
@@ -109,7 +120,10 @@ export function BoardHeader({
               <BorderColorIcon className="h-4 w-4" />
               Rename
             </DropdownMenuItem>
-            <DropdownMenuItem className="cursor-pointer">
+            <DropdownMenuItem
+              onClick={() => setIsChangeCoverOpen(true)}
+              className="cursor-pointer"
+            >
               <ColorLensIcon className="h-4 w-4" />
               Change Cover
             </DropdownMenuItem>

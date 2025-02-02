@@ -177,3 +177,34 @@ export const deleteBoardById = async (
 
   return "Board deleted!";
 };
+
+/**
+ * Updates the cover color aka `background` of a board.
+ *
+ * @param {string} boardId - The unique identifier of the board.
+ * @param {string} workspaceId - The unique identifier of the workspace the board belongs to.
+ * @param {string} newColorCode - The new color code to set as the board's cover.
+ * @returns {Promise<Error | string>} - Returns a success message or an error if the update fails.
+ **/
+export const changeCoverById = async (
+  boardId: string,
+  workspaceId: string,
+  newColorCode: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  const { error: updateError } = await supabase
+    .from("boards")
+    .update({
+      background: newColorCode,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("workspace_id", workspaceId)
+    .eq("id", boardId);
+
+  if (updateError) {
+    return new Error(updateError.message);
+  }
+
+  return "Cover changed!";
+};
