@@ -9,7 +9,6 @@ import { DeleteDialog } from "./deleteDialog";
 import { ChangesDialog } from "./changesDialog";
 import { ChangeCoverDialog } from "./changeCoverDialog";
 import { successToast, errorToast } from "@/utils/toasts";
-import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -158,8 +157,6 @@ export function BoardHeader({
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-
-      <Separator />
     </div>
   );
 }

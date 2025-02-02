@@ -13,7 +13,7 @@ export default async function Board({ params }: BoardProps) {
   const boardId = (await params).board;
 
   return (
-    <div className="h-full mt-[60px] p-4">
+    <div className="h-full mt-[60px] pt-4">
       <BoardPageWrapper boardId={boardId} />
     </div>
   );

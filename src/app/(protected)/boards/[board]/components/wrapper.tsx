@@ -8,6 +8,7 @@ import { BoardType } from "../actions/types";
 import { getBoardById } from "../actions";
 import { BoardHeader } from "./header";
 import { errorToast } from "@/utils/toasts";
+import { DeckList } from "./deckList";
 
 export function BoardPageWrapper({ boardId }: { boardId: string }) {
   const { toast } = useToast();
@@ -47,10 +48,10 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
   }, [profile]);
 
   return (
-    <div>
+    <div className="h-full flex flex-col justify-between">
       {/* Board Heading and Controls */}
       {userProfile && board ? (
-        <div>
+        <div className="px-4">
           <BoardHeader
             board={board}
             workspaceId={userProfile.default_workspace_id}
@@ -58,10 +59,22 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
           />
         </div>
       ) : (
-        <div>
-          <p className="">Loading..</p>
+        <div className="px-4">
+          <p>Loading..</p>
         </div>
       )}
+
+      {/* Board Body */}
+      <div className="flex-1">
+        {userProfile && board ? (
+          <DeckList
+            workspaceId={userProfile.default_workspace_id}
+            boardId={board.id}
+          />
+        ) : (
+          <p className="">Loading..</p>
+        )}
+      </div>
     </div>
   );
 }

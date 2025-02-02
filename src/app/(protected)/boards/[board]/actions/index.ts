@@ -208,3 +208,59 @@ export const changeCoverById = async (
 
   return "Cover changed!";
 };
+
+/**
+ * Creates a new deck within a specified board.
+ *
+ * This function authenticates the user, retrieves the current highest deck order
+ * in the given board, and inserts a new deck with an incremented order value.
+ *
+ * @param {string} workspaceId - The ID of the workspace to which the deck belongs.
+ * @param {string} boardId - The ID of the board where the deck will be created.
+ * @param {string} name - The name of the new deck.
+ * @returns {Promise<Error | string>} - Returns a success message or an error if the operation fails.
+ **/
+export const createDeck = async (
+  workspaceId: string,
+  boardId: string,
+  name: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // authenticating and getting the user id
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+
+  if (authError) {
+    return new Error(authError.message);
+  }
+
+  // check the number of decks created in this board
+  const { data: queryData, error: queryError } = await supabase
+    .from("decks")
+    .select()
+    .eq("board_id", boardId)
+    .order("order", { ascending: false })
+    .limit(1);
+
+  if (queryError) {
+    return new Error(queryError.message);
+  }
+
+  // calculating new deck order
+  const deckOrder = queryData.length > 0 ? queryData[0].order + 1 : 1;
+
+  // insert row
+  const { error: insertionError } = await supabase.from("decks").insert({
+    user_id: authData.user.id,
+    workspace_id: workspaceId,
+    board_id: boardId,
+    name: name,
+    order: deckOrder,
+  });
+
+  if (insertionError) {
+    return new Error(insertionError.message);
+  }
+
+  return "Deck created!";
+};
