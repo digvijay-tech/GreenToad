@@ -39,7 +39,9 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
-    useSensor(TouchSensor),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 250, tolerance: 5 },
+    }),
   );
 
   // DnD-Kit Drag handler
