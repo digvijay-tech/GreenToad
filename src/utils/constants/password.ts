@@ -1,5 +1,6 @@
-// minimum required length
+// Password lengths
 export const PASSWORD_MINLEN = 8;
+export const PASSWORD_MAXLEN = 18;
 
 // minimum lowercase characters required
 export const PASSWORD_MIN_LCASE = 1;

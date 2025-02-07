@@ -1,10 +1,10 @@
 // Login Page Layout
 import { Separator } from "@/components/ui/separator";
 import { HeadingTwo } from "@/components/typography/headings";
-import { SocialSignInButton } from "@/components/socialSignIn/socialSignInBtn";
-import { EmailSignIn } from "./emailSignIn";
+import { SocialSignInButton } from "@/components/social-signin/social-signin";
+import { EmailSignIn } from "./email-signin";
 
-export function LoginLayout({ pageHeading }) {
+export function LoginLayout({ pageHeading }: { pageHeading: string }) {
   return (
     <main className="h-screen">
       <div className="container h-[100%] mx-auto flex flex-col items-center justify-center">

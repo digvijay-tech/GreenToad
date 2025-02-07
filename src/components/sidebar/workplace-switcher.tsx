@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile/index";
 import { UserProfileType, WorkspaceType } from "@/contexts/profile/types";
-import { switchWorkspace } from "./actions";
-import { useToast } from "@/hooks/use-toast";
+import { switchWorkspaceAction } from "./actions";
 import { errorToast } from "@/utils/toasts";
 import {
   SidebarMenu,
@@ -35,10 +35,9 @@ export function WorksplaceSwitcher() {
     WorkspaceType[] | null
   >(null);
 
-  // handle workspace switch
   const handleWorkspaceSwitch = async (wsId: string) => {
     try {
-      const result = await switchWorkspace(wsId);
+      const result = await switchWorkspaceAction(wsId);
 
       if (result instanceof Error) {
         throw result;

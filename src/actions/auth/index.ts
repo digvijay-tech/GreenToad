@@ -10,21 +10,21 @@ import { AuthError, User } from "@supabase/supabase-js";
  * Handles user signup by validating email and password, and interacting with Supabase to create a new user.
  *
  * @param {FormData} formData - The form data containing the user's email and password.
- * @returns {string | object} - An error message if signup fails, or the Supabase response data on success.
+ * @returns {Error | string} - An error message if signup fails, or the Supabase response data on success.
  **/
 export const signUpAction = async (
   formData: FormData,
-): Promise<string | object> => {
+): Promise<Error | string> => {
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
   if (!email || !password) {
-    return "Email and password are required";
+    return new Error("Email and password are required");
   }
 
-  const { data, error } = await supabase.auth.signUp({
+  const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -32,22 +32,28 @@ export const signUpAction = async (
     },
   });
 
-  if (error) {
-    return error;
-  } else {
-    return data;
+  if (authError) {
+    return new Error(authError.message);
   }
+
+  if (!authData.user) {
+    return new Error(
+      "Thank you for signin-up. Please follow the instructions on the confirmation email that we sent.",
+    );
+  }
+
+  return `Thank you for signin-up. Please follow the instructions on the confirmation email that we sent on ${authData.user.email}`;
 };
 
 /**
  * Handles user sign-in by authenticating the user with Supabase using email and password.
  *
  * @param {FormData} formData - The form data containing the user's email and password.
- * @returns {string | void} - An error message if sign-in fails, or redirects to the dashboard on success.
+ * @returns {Error | void} - An error message if sign-in fails, or redirects to the dashboard on success.
  **/
 export const signInAction = async (
   formData: FormData,
-): Promise<AuthError | void> => {
+): Promise<Error | void> => {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const supabase = await createClient();
@@ -58,21 +64,24 @@ export const signInAction = async (
   });
 
   if (error) {
-    return error;
+    return new Error(error.message);
   }
 
+  // redirecting on success
   return redirect("/dashboard");
 };
 
 // Still Working on it!
-export const forgotPasswordAction = async (formData: FormData) => {
+export const forgotPasswordAction = async (
+  formData: FormData,
+): Promise<Error | string> => {
   const email = formData.get("email")?.toString();
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
   const callbackUrl = formData.get("callbackUrl")?.toString();
 
   if (!email) {
-    return "Email is required";
+    return new Error("Email is required");
   }
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
@@ -80,7 +89,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    return error;
+    return new Error(error.message);
   }
 
   if (callbackUrl) {
@@ -168,7 +177,7 @@ export const getAuthenticatedUserAction = async (): Promise<User | null> => {
  *
  * @returns {void | string} - Redirects to Identity Provider for authentication or returns an error if the sign-in fails.
  **/
-export const signInWithGithub = async (): Promise<AuthError | void> => {
+export const signInWithGithubAction = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -186,7 +195,7 @@ export const signInWithGithub = async (): Promise<AuthError | void> => {
   redirect(data.url);
 };
 
-export const signInWithApple = async (): Promise<AuthError | void> => {
+export const signInWithAppleAction = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -204,7 +213,7 @@ export const signInWithApple = async (): Promise<AuthError | void> => {
   redirect(data.url);
 };
 
-export const signInWithGoogle = async (): Promise<AuthError | void> => {
+export const signInWithGoogleAction = async (): Promise<AuthError | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 

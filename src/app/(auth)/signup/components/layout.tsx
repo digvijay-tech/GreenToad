@@ -1,13 +1,13 @@
 // Signup Page Layout
 import Link from "next/link";
-import { AnimatedWindow } from "./animatedWindow";
-import { SignUpNavbar } from "./localNavbar";
+import { AnimatedWindow } from "./animated-window";
+import { SignUpNavbar } from "./local-navbar";
 import { HeadingTwo } from "@/components/typography/headings";
-import { EmailSignUp } from "./emailSignUp";
-import { SocialSignInButton } from "@/components/socialSignIn/socialSignInBtn";
+import { EmailSignUp } from "./email-signup";
+import { SocialSignInButton } from "@/components/social-signin/social-signin";
 import { Separator } from "@/components/ui/separator";
 
-export function SignUpLayout({ pageHeading }) {
+export function SignUpLayout({ pageHeading }: { pageHeading: string }) {
   return (
     <main>
       <div className="h-screen flex flex-row items-center">

@@ -2,9 +2,10 @@
 "use client";
 
 import { Loader2 } from "lucide-react";
+import React from "react";
 
 // CSS Styles for Overay
-const overlayStyles = {
+const overlayStyles: React.CSSProperties = {
   width: "max-content",
   position: "absolute",
   top: "50%",
@@ -14,7 +15,7 @@ const overlayStyles = {
   transform: "translate(-50%, -50%)",
 };
 
-export function LoadingOverlay({ loadingText }) {
+export function LoadingOverlay({ loadingText }: { loadingText: string }) {
   return (
     <div className="fixed z-50 top-0 bottom-0 left-0 right-0 bg-[#ffffff]">
       <div style={overlayStyles} className="z-50">

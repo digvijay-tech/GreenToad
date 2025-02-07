@@ -1,6 +1,6 @@
 // Headings: h1, h2, h3, h4
 
-export function HeadingOne({ text }) {
+export function HeadingOne({ text }: { text: string }) {
   return (
     <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
       {text}
@@ -8,7 +8,7 @@ export function HeadingOne({ text }) {
   );
 }
 
-export function HeadingTwo({ text }) {
+export function HeadingTwo({ text }: { text: string }) {
   return (
     <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
       {text}
@@ -16,7 +16,7 @@ export function HeadingTwo({ text }) {
   );
 }
 
-export function HeadingThree({ text }) {
+export function HeadingThree({ text }: { text: string }) {
   return (
     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
       {text}
@@ -24,7 +24,7 @@ export function HeadingThree({ text }) {
   );
 }
 
-export function HeadingFour({ text }) {
+export function HeadingFour({ text }: { text: string }) {
   return (
     <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">{text}</h4>
   );

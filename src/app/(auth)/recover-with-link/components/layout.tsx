@@ -1,7 +1,7 @@
 // Layout for Recover Password Page
 import { HeadingTwo } from "@/components/typography/headings";
 import { Separator } from "@/components/ui/separator";
-import { RecoverForm } from "./recoverForm";
+import { RecoverForm } from "./recover-form";
 
 export function RecoverPasswordLayout() {
   return (
@@ -14,7 +14,7 @@ export function RecoverPasswordLayout() {
 
           <p className="text-justify mt-3">
             To regain access to your account, please create a new password
-            below. Once updated, you'll be able to log in with your new
+            below. Once updated, you&apos;ll be able to log in with your new
             credentials.
           </p>
 

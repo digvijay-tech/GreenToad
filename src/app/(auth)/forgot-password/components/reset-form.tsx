@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { isEmail } from "validator";
 import { forgotPasswordAction } from "@/actions/auth";
 import { Input } from "@/components/ui/input";
@@ -13,13 +13,13 @@ import { AlertCircle, Loader2 } from "lucide-react";
 import EmailIcon from "@mui/icons-material/Email";
 
 export function ResetPasswordForm() {
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // handles password reset flow
-  const handlePasswordReset = async (e) => {
+  const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -37,8 +37,7 @@ export function ResetPasswordForm() {
     // sending form-data to supabase
     const result = await forgotPasswordAction(fd);
 
-    // message property is only available when the error object is return by forgotPasswordAction()
-    if (result.message) {
+    if (result instanceof Error) {
       setSuccessMessage(null);
       setError(result.message);
       setIsLoading(false);
@@ -56,7 +55,7 @@ export function ResetPasswordForm() {
     <div className="text-left">
       {/* Rendering Success Messages */}
       {successMessage && (
-        <Alert variant="success" className="my-3">
+        <Alert variant="default" className="my-3">
           <AlertCircle className="h-4 w-4" color="#2ecc71" />
           <AlertTitle>Success</AlertTitle>
           <AlertDescription>{successMessage}</AlertDescription>
@@ -81,6 +80,7 @@ export function ResetPasswordForm() {
             autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value.trim())}
+            disabled={isLoading}
             required
           />
         </div>

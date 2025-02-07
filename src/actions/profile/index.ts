@@ -10,7 +10,7 @@ import { createClient } from "@/config/supabase/server";
  * user's ID. If an error occurs during either the authentication or profile retrieval process,
  * it returns `null`.
  *
- * @returns {Promise<any | null>} The user's profile data if found, or null if an error occurs
+ * @returns {Promise<unknown | null>} The user's profile data if found, or null if an error occurs
  *                                during authentication or profile retrieval.
  **/
 export const getUserProfileAction = async (): Promise<unknown | null> => {
@@ -43,10 +43,10 @@ export const getUserProfileAction = async (): Promise<unknown | null> => {
  * the authenticated user's `id`. If there is an error during the workspace query, it also returns `null`.
  * If both the user and workspace data are successfully retrieved, the function returns the list of workspaces.
  *
- * @returns {Promise<Workspace[] | null>} A promise that resolves to an array of workspaces if successful,
+ * @returns {Promise<unknown[] | null>} A promise that resolves to an array of workspaces if successful,
  * or `null` if an error occurs at any point in the process.
  **/
-export const getUserWorkspacesAction = async () => {
+export const getUserWorkspacesAction = async (): Promise<unknown[] | null> => {
   const supabase = await createClient();
 
   const { data: authResult, error: authError } = await supabase.auth.getUser();

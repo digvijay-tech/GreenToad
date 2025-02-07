@@ -5,8 +5,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useUserProfileContext } from "@/contexts/profile/index";
-import { WorksplaceSwitcher } from "@/components/sidebar/workplaceSwitcher";
-import { SidebarUser } from "@/components/sidebar/sidebarUser";
+import { WorksplaceSwitcher } from "@/components/sidebar/workplace-switcher";
+import { SidebarUser } from "@/components/sidebar/sidebar-user";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import SettingsIcon from "@mui/icons-material/Settings";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
@@ -43,11 +43,12 @@ const links = [
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, getUser } = useUserProfileContext();
-  const [name, setName] = useState(null);
-  const [email, setEmail] = useState(null);
-  const [pictureUrl, setPictureUrl] = useState(null);
+  const [name, setName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [pictureUrl, setPictureUrl] = useState<string | null>(null);
 
   useEffect(() => {
+    // when user is present in UserProfile Context
     if (user) {
       setEmail(user.email);
       setName(user.user_metadata.full_name);
@@ -56,6 +57,7 @@ export function AppSidebar() {
       return;
     }
 
+    // when user is not in UserProfile Context
     (async function () {
       const profile = await getUser();
 
@@ -65,6 +67,7 @@ export function AppSidebar() {
         setPictureUrl(profile.user_metadata.picture);
       }
     })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (
@@ -103,7 +106,9 @@ export function AppSidebar() {
 
       {/* Fixed Footer Section with Menu */}
       <SidebarFooter>
-        <SidebarUser name={name} email={email} imageUrl={pictureUrl} />
+        {email && (
+          <SidebarUser name={name} email={email} imageUrl={pictureUrl} />
+        )}
       </SidebarFooter>
     </Sidebar>
   );

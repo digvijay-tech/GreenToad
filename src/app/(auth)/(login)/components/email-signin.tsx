@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { signInAction } from "@/actions/auth";
 import { isEmail } from "validator";
 import { Input } from "@/components/ui/input";
@@ -11,18 +11,25 @@ import EmailIcon from "@mui/icons-material/Email";
 import { Loader2 } from "lucide-react";
 
 export function EmailSignIn() {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
-  const [emailError, setEmailError] = useState(null);
-  const [passwordError, setPasswordError] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // handling email sign-in
-  const handleEmailSignIn = async (e) => {
+  const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // start loading state
     setIsLoading(true);
+
+    // voiding null value
+    if (!email || !password) {
+      setEmailError("Missing required inputs!");
+      setIsLoading(false);
+      return;
+    }
 
     // validating email input
     if (!isEmail(email)) {
@@ -57,7 +64,11 @@ export function EmailSignIn() {
 
     // sending data to supabase for authentication
     const error = await signInAction(fd);
-    setPasswordError(error.message);
+
+    if (error instanceof Error) {
+      setPasswordError(error.message);
+    }
+
     setIsLoading(false);
   };
 
@@ -71,6 +82,7 @@ export function EmailSignIn() {
             id="emailInput"
             autoComplete="username"
             onChange={(e) => setEmail(e.target.value.trim())}
+            disabled={isLoading}
             required
           />
           <p
@@ -86,6 +98,7 @@ export function EmailSignIn() {
             id="passwordInput"
             autoComplete="current-password"
             onChange={(e) => setPassword(e.target.value.trim())}
+            disabled={isLoading}
             required
           />
           <p
@@ -114,7 +127,7 @@ export function EmailSignIn() {
         </div>
 
         <div className="text-center mt-3">
-          Don't have an account?
+          Don&apos;t have an account?
           <Link href="/signup" className="ml-2 underline hover:no-underline">
             Signup
           </Link>

@@ -1,8 +1,8 @@
 // Forgot Password Page Layout
 import { HeadingTwo } from "@/components/typography/headings";
-import { ResetPasswordForm } from "./resetForm";
+import { ResetPasswordForm } from "./reset-form";
 
-export function ForgotPasswordLayout({ pageHeading }) {
+export function ForgotPasswordLayout({ pageHeading }: { pageHeading: string }) {
   return (
     <main className="h-screen">
       <div className="container h-[100%] mx-auto flex flex-col items-center justify-center">
@@ -11,7 +11,7 @@ export function ForgotPasswordLayout({ pageHeading }) {
           <HeadingTwo text={pageHeading} />
 
           <p className="">
-            We'll send you a link with instructions on how to reset your
+            We&apos;ll send you a link with instructions on how to reset your
             password.
           </p>
 

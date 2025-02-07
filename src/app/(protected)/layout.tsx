@@ -1,6 +1,7 @@
 // Custom Layout with Sidebar (Only For Protected Routes)
 "use client";
 
+import { ReactNode } from "react";
 import { AppSidebar } from "@/components/sidebar/sidebar";
 import { HeadingThree } from "@/components/typography/headings";
 import { Separator } from "@/components/ui/separator";
@@ -10,7 +11,7 @@ import {
   SidebarInset,
 } from "@/components/ui/sidebar";
 
-export default function SideBarLayout({ children }) {
+export default function SideBarLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       {/* Sidebar Component */}

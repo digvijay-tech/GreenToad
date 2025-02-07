@@ -2,13 +2,13 @@
 
 // Social Sign-in Buttons
 import { useEffect, useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import {
-  signInWithGithub,
-  signInWithApple,
-  signInWithGoogle,
+  signInWithGithubAction,
+  signInWithAppleAction,
+  signInWithGoogleAction,
 } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
 import { GoogleLogoIcon } from "@/components/icons/google";
 import { BlackAppleLogoIcon } from "@/components/icons/apple";
 import { BlackGitHubLogoIcon } from "@/components/icons/github";
@@ -49,14 +49,14 @@ class Provider {
 }
 
 const google = new Provider("Google", GoogleLogoIcon, () =>
-  handleOAuthSignIn(signInWithGoogle),
+  handleOAuthSignIn(signInWithGoogleAction),
 );
 
 const apple = new Provider("Apple", BlackAppleLogoIcon, () =>
-  handleOAuthSignIn(signInWithApple),
+  handleOAuthSignIn(signInWithAppleAction),
 );
 const github = new Provider("GitHub", BlackGitHubLogoIcon, () =>
-  handleOAuthSignIn(signInWithGithub),
+  handleOAuthSignIn(signInWithGithubAction),
 );
 
 const providers = new Map();

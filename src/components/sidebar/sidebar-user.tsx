@@ -6,7 +6,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { signOutAction } from "@/actions/auth";
 import { useUserProfileContext } from "@/contexts/profile/index";
-import { LoadingOverlay } from "@/components/overlays/loadingOverlay";
+import { LoadingOverlay } from "@/components/overlays/loading-overlay";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   SidebarMenu,
@@ -33,11 +33,17 @@ import {
   User2,
 } from "lucide-react";
 
-export function SidebarUser({ name, email, imageUrl }) {
+interface SidebarUserProps {
+  name: string | null;
+  email: string;
+  imageUrl: string | null;
+}
+
+export function SidebarUser({ name, email, imageUrl }: SidebarUserProps) {
   const pathname = usePathname();
   const { isMobile } = useSidebar();
   const { removeUserProfileContext } = useUserProfileContext();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleLogOut = async () => {
     // start loading
@@ -61,7 +67,9 @@ export function SidebarUser({ name, email, imageUrl }) {
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={imageUrl} alt="@user-profile" />
+                  {imageUrl && (
+                    <AvatarImage src={imageUrl} alt="@user-profile" />
+                  )}
                   <AvatarFallback className="rounded-lg">
                     <User2 />
                   </AvatarFallback>
@@ -85,7 +93,7 @@ export function SidebarUser({ name, email, imageUrl }) {
               <DropdownMenuLabel className="p-0 font-normal">
                 <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                   <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={imageUrl} alt="@user" />
+                    {imageUrl && <AvatarImage src={imageUrl} alt="@user" />}
                     <AvatarFallback className="rounded-lg">
                       <User2 />
                     </AvatarFallback>

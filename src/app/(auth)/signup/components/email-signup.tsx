@@ -1,9 +1,10 @@
 // Email Signup Form
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { isEmail } from "validator";
 import { isValidPassword } from "@/utils/validators";
+import { PASSWORD_MAXLEN, PASSWORD_MINLEN } from "@/utils/constants/password";
 import { signUpAction } from "@/actions/auth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,28 +13,24 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Loader2, CheckCheckIcon } from "lucide-react";
 
 export function EmailSignUp() {
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
-  const [createPassword, setCreatePassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
+  const [createPassword, setCreatePassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // handles supabase email signup and user input validation
-  const handleEmailSignUp = async (e) => {
+  const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // start loader
     setIsLoading(true);
 
-    // validate email
     if (!isEmail(email)) {
       setIsLoading(false);
       setError("Email is invalid!");
       return;
     }
 
-    // validate password
     if (!isValidPassword(createPassword)) {
       setIsLoading(false);
       setError(
@@ -57,41 +54,21 @@ export function EmailSignUp() {
     // sending form-data object to supabase
     const result = await signUpAction(fd);
 
-    // on error response
-    if (result.message) {
-      // clear inputs
+    if (result instanceof Error) {
       setEmail("");
       setCreatePassword("");
       setConfirmPassword("");
-
-      // clear success message (if any)
       setSuccessMessage(null);
-
-      // render server error
       setError(result.message);
       setIsLoading(false);
       return;
     }
 
-    // on success response
-    if (result.user) {
-      // clear inputs
-      setEmail("");
-      setCreatePassword("");
-      setConfirmPassword("");
-
-      // clear server error
-      setError(null);
-
-      // render success message
-      const msg = `Thank you for signin-up. Please follow the instructions on the confirmation email that we sent on ${result.user.email}`;
-      setSuccessMessage(msg);
-      setIsLoading(false);
-      return;
-    }
-
-    // for unexpected things
-    setError("Something went wrong, please try again later!");
+    setEmail("");
+    setCreatePassword("");
+    setConfirmPassword("");
+    setError(null);
+    setSuccessMessage(result);
     setIsLoading(false);
   };
 
@@ -99,7 +76,7 @@ export function EmailSignUp() {
     <div>
       {/* Rendering Success Messages */}
       {successMessage && (
-        <Alert variant="success" className="my-3">
+        <Alert variant="default" className="my-3">
           <CheckCheckIcon className="h-6 w-6" color="#2ecc71" />
           <AlertTitle>🎉 Hooray!</AlertTitle>
           <AlertDescription>{successMessage}</AlertDescription>
@@ -124,6 +101,8 @@ export function EmailSignUp() {
             autoComplete="username"
             value={email}
             onChange={(e) => setEmail(e.target.value.trim())}
+            disabled={isLoading}
+            maxLength={60}
             required
           />
         </div>
@@ -135,7 +114,9 @@ export function EmailSignUp() {
             autoComplete="new-password"
             value={createPassword}
             onChange={(e) => setCreatePassword(e.target.value.trim())}
-            maxLength={22}
+            disabled={isLoading}
+            maxLength={PASSWORD_MAXLEN}
+            minLength={PASSWORD_MINLEN}
             required
           />
         </div>
@@ -147,7 +128,9 @@ export function EmailSignUp() {
             autoComplete="new-password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value.trim())}
-            maxLength={22}
+            disabled={isLoading}
+            maxLength={PASSWORD_MAXLEN}
+            minLength={PASSWORD_MINLEN}
             required
           />
         </div>
