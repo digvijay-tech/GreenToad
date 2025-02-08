@@ -105,7 +105,7 @@ export function BoardHeader({
           )}
         </h4>
 
-        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
+        <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen} modal={false}>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon">
               <MoreVertIcon className="h-4 w-4" />

@@ -4,19 +4,12 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { createDeckAction } from "../actions";
 import { successToast } from "@/utils/toasts";
+import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogHeader,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import { PlusCircle } from "lucide-react";
 
 interface CreateDeckProps {
@@ -65,6 +58,7 @@ export function CreateDeck({ workspaceId, boardId, cb }: CreateDeckProps) {
 
   return (
     <div className="w-[320px]">
+      {/* Add Deck Dialog Trigger */}
       <Button
         onClick={() => setOpen(true)}
         type="button"
@@ -75,56 +69,48 @@ export function CreateDeck({ workspaceId, boardId, cb }: CreateDeckProps) {
         Add new deck
       </Button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent
-          onInteractOutside={(e) => e.preventDefault()}
-          onCloseAutoFocus={removeStateAndClose}
-        >
-          {/* Heading */}
-          <DialogHeader>
-            <DialogTitle>Create New Deck</DialogTitle>
-            <DialogDescription>
-              You can only create 25 decks per board!
-            </DialogDescription>
-          </DialogHeader>
+      {/* Add Deck Responsive Dialog */}
+      <ResponsiveDialog
+        open={open}
+        setOpen={setOpen}
+        title="Create New Deck"
+        description="You can only create 25 decks per board!"
+        persistOnInteraction
+      >
+        {/* Error Display */}
+        {error && (
+          <Alert variant="destructive">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          {/* Error Display */}
-          {error && (
-            <Alert variant="destructive">
-              <AlertTitle>Error</AlertTitle>
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+        {/* Create Deck Form */}
+        <form onSubmit={handleCreateDeck}>
+          <div className="mt-2">
+            <Label htmlFor="deckNameInput">Enter Deck Name</Label>
+            <Input
+              type="text"
+              id="deckNameInput"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={isLoading}
+              minLength={1}
+              maxLength={26}
+              required
+            />
+          </div>
 
-          {/* Create Deck Form */}
-          <form onSubmit={handleCreateDeck}>
-            <div>
-              <Label htmlFor="deckNameInput">Enter Deck Name</Label>
-              <Input
-                type="text"
-                id="deckNameInput"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                disabled={isLoading}
-                minLength={1}
-                maxLength={26}
-                required
-              />
-            </div>
-
-            <DialogFooter>
-              <div className="mt-3">
-                <LoadingStateButtonWithText
-                  isLoading={isLoading}
-                  type="submit"
-                  variant="default"
-                  text="Create"
-                />
-              </div>
-            </DialogFooter>
-          </form>
-        </DialogContent>
-      </Dialog>
+          <div className="mt-3">
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="submit"
+              variant="default"
+              text="Create"
+            />
+          </div>
+        </form>
+      </ResponsiveDialog>
     </div>
   );
 }

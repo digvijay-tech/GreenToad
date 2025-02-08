@@ -4,19 +4,13 @@ import React, { useState, useEffect } from "react";
 import { createBoardAction } from "../actions";
 import { isValidBoardName } from "@/utils/validators";
 import { colors } from "@/utils/constants/colors";
+import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { HeadingTwo } from "@/components/typography/headings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -28,7 +22,6 @@ import {
 } from "@/components/ui/select";
 import { PlusCircleIcon, AlertCircle } from "lucide-react";
 import CircleIcon from "@mui/icons-material/Circle";
-import CloseIcon from "@mui/icons-material/Close";
 
 {
   /* Page Heading and Create Board Button */
@@ -92,103 +85,84 @@ export function BoardPageHeader({ cb }: { cb: () => void }) {
       {/* Page Heading */}
       <HeadingTwo text="Boards" />
 
-      <div>
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          {/* Dialog Trigger for Open */}
-          <Button
-            onClick={() => setIsOpen(true)}
-            type="button"
-            variant="outline"
-          >
-            <PlusCircleIcon />
-            Create
-          </Button>
+      {/* Dialog Trigger */}
+      <Button onClick={() => setIsOpen(true)} type="button" variant="outline">
+        <PlusCircleIcon />
+        Create
+      </Button>
 
-          {/* Actual Dialog Box */}
-          <DialogContent className="sm:max-w-[425px] [&>button]:hidden">
-            {/* Custom Close Dialog Button */}
-            <div className="text-right absolute top-2 right-2">
-              <Button size="icon" variant="ghost" onClick={handleDialogClose}>
-                <CloseIcon className="h-5 w-5" />
-              </Button>
-            </div>
+      {/* Dialog Body */}
+      <ResponsiveDialog
+        open={isOpen}
+        setOpen={setIsOpen}
+        title="Create New Board"
+        description="You can create upto 10 boards in this workspace."
+        persistOnInteraction
+      >
+        {/* Display Error */}
+        {error && (
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-            {/* Dialog Header with remaining board count */}
-            <DialogHeader>
-              <DialogTitle>Create New Board</DialogTitle>
-              <DialogDescription>
-                You can create upto 10 boards in this workspace.
-              </DialogDescription>
-            </DialogHeader>
+        <form onSubmit={handleCreate}>
+          <div className="mt-2">
+            <Label htmlFor="nameInput">Enter Board Name</Label>
+            <Input
+              id="nameInput"
+              type="text"
+              value={boardName}
+              onChange={(e) => setBoardName(e.target.value)}
+              disabled={isLoading}
+              maxLength={36}
+              required
+            />
+          </div>
 
-            {/* Display Error */}
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+          <div className="mt-3">
+            <Label>Choose Cover</Label>
+            <Select
+              value={!selectedColor ? "" : selectedColor}
+              onValueChange={setSelectedColor}
+              disabled={isLoading}
+              required
+            >
+              <SelectTrigger className="w-inherit">
+                <SelectValue placeholder="Select a color" />
+              </SelectTrigger>
 
-            <div className="border-t pt-3">
-              <form onSubmit={handleCreate}>
-                <div>
-                  <Label htmlFor="nameInput">Enter Board Name</Label>
-                  <Input
-                    id="nameInput"
-                    type="text"
-                    value={boardName}
-                    onChange={(e) => setBoardName(e.target.value)}
-                    disabled={isLoading}
-                    maxLength={36}
-                    required
-                  />
-                </div>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Available Colors:</SelectLabel>
+                  {colors.map((c, i) => (
+                    <SelectItem key={i} value={c.code}>
+                      <span className="flex items-center">
+                        <CircleIcon
+                          className="mr-4"
+                          style={{ color: c.code }}
+                        />
+                        {c.label}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
 
-                <div className="mt-3">
-                  <Label htmlFor="bgInput">Choose Cover</Label>
-                  <Select
-                    value={!selectedColor ? "" : selectedColor}
-                    onValueChange={setSelectedColor}
-                    disabled={isLoading}
-                    required
-                  >
-                    <SelectTrigger className="w-inherit">
-                      <SelectValue placeholder="Select a color" />
-                    </SelectTrigger>
-
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Available Colors:</SelectLabel>
-                        {colors.map((c, i) => (
-                          <SelectItem key={i} value={c.code}>
-                            <span className="flex items-center">
-                              <CircleIcon
-                                className="mr-4"
-                                style={{ color: c.code }}
-                              />
-                              {c.label}
-                            </span>
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="mt-3">
-                  <LoadingStateButtonWithText
-                    isLoading={isLoading}
-                    type="submit"
-                    variant="default"
-                    text="Create"
-                  />
-                </div>
-              </form>
-            </div>
-          </DialogContent>
-        </Dialog>
-      </div>
+          <div className="mt-3">
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="submit"
+              variant="default"
+              text="Create"
+            />
+          </div>
+        </form>
+      </ResponsiveDialog>
     </div>
   );
 }

@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +21,7 @@ import {
 interface ResponsiveDialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  closeOnInteraction?: boolean;
+  persistOnInteraction?: boolean;
   title: string;
   description: string;
   children: React.ReactNode;
@@ -29,7 +30,7 @@ interface ResponsiveDialogProps {
 export function ResponsiveDialog({
   open,
   setOpen,
-  closeOnInteraction,
+  persistOnInteraction,
   title,
   description,
   children,
@@ -42,7 +43,7 @@ export function ResponsiveDialog({
       <Drawer open={open} onOpenChange={setOpen}>
         <DrawerContent
           onInteractOutside={
-            closeOnInteraction ? (e) => e.preventDefault() : undefined
+            persistOnInteraction ? (e) => e.preventDefault() : undefined
           }
         >
           <DrawerHeader className="text-left">
@@ -50,7 +51,7 @@ export function ResponsiveDialog({
             <DrawerDescription>{description}</DrawerDescription>
           </DrawerHeader>
 
-          <div className="mt-3 mb-4 px-2">{children}</div>
+          <div className="mt-3 mb-4 px-3">{children}</div>
         </DrawerContent>
       </Drawer>
     );
@@ -62,7 +63,7 @@ export function ResponsiveDialog({
       <DialogContent
         className="sm:max-w-[425px]"
         onInteractOutside={
-          closeOnInteraction ? (e) => e.preventDefault() : undefined
+          persistOnInteraction ? (e) => e.preventDefault() : undefined
         }
       >
         <DialogHeader>
@@ -70,7 +71,9 @@ export function ResponsiveDialog({
           <DialogDescription>{description}</DialogDescription>
         </DialogHeader>
 
-        <div className="mt-3 mb-4 px-2">{children}</div>
+        <Separator />
+
+        <div className="mt-1 mb-4 px-1">{children}</div>
       </DialogContent>
     </Dialog>
   );

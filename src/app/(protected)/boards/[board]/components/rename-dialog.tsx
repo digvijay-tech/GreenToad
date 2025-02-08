@@ -2,18 +2,11 @@
 
 import React, { useState } from "react";
 import { renameBoardAction } from "../actions";
+import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 export function RenameDialog({
   open,
@@ -70,51 +63,44 @@ export function RenameDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onInteractOutside={(e) => e.preventDefault()}
-        onCloseAutoFocus={handleUnsavedClose}
-      >
-        <DialogHeader>
-          <DialogTitle>Edit Name</DialogTitle>
-          <DialogDescription>
-            The name must be between 2 and 36 characters in length.
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      setOpen={setOpen}
+      title="Edit Name"
+      description="The name must be between 2 and 36 characters in length."
+      persistOnInteraction
+    >
+      {/* Error Display */}
+      {error && (
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-        {/* Error Display */}
-        {error && (
-          <Alert variant="destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+      <form onSubmit={handleRename}>
+        <div className="mt-2">
+          <Label htmlFor="boardName">Board Name</Label>
+          <Input
+            id="boardName"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            minLength={2}
+            maxLength={36}
+            required
+          />
+        </div>
 
-        <form onSubmit={handleRename}>
-          <div>
-            <Label htmlFor="boardName">Board Name</Label>
-            <Input
-              id="boardName"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              minLength={2}
-              maxLength={36}
-              required
-            />
-          </div>
-
-          <DialogFooter className="mt-3">
-            <LoadingStateButtonWithText
-              isLoading={isLoading}
-              type="submit"
-              variant="default"
-              text="Save"
-            />
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+        <div className="mt-3">
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            type="submit"
+            variant="default"
+            text="Save"
+          />
+        </div>
+      </form>
+    </ResponsiveDialog>
   );
 }

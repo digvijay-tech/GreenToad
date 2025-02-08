@@ -5,17 +5,10 @@ import { useToast } from "@/hooks/use-toast";
 import { redirect } from "next/navigation";
 import { deleteBoardByIdAction } from "../actions";
 import { successToast } from "@/utils/toasts";
+import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 export function DeleteDialog({
   open,
@@ -50,54 +43,46 @@ export function DeleteDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onInteractOutside={(e) => e.preventDefault()}
-      >
-        <DialogHeader>
-          <DialogTitle>Warning: Permanent Deletion of Board</DialogTitle>
-          <DialogDescription>
-            You are about to delete this board. This action is irreversible, and
-            all associated data will be permanently removed. Please confirm that
-            you wish to proceed.
-          </DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog
+      open={open}
+      setOpen={setOpen}
+      title="Warning: Permanent Deletion of Board"
+      description="You are about to delete this board. This action is irreversible, and all associated data will be permanently removed. Please confirm that you wish to proceed."
+      persistOnInteraction
+    >
+      {/* Error Display */}
+      {error && (
+        <Alert variant="destructive">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
 
-        {/* Error Display */}
-        {error && (
-          <Alert variant="destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <DialogFooter className="mt-3">
-          <div className="w-full flex flex-row justify-between items-center">
-            <div className="flex-1">
-              <LoadingStateButtonWithText
-                isLoading={isLoading}
-                type="button"
-                variant="destructive"
-                text="Delete"
-                onClick={handleDelete}
-              />
-            </div>
-
-            <div className="mx-1"></div>
-
-            <div className="flex-1">
-              <Button
-                variant="outline"
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
-                Cancel
-              </Button>
-            </div>
+      <div className="mt-3">
+        <div className="w-full flex flex-row justify-between items-center">
+          <div className="flex-1">
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="button"
+              variant="destructive"
+              text="Delete"
+              onClick={handleDelete}
+            />
           </div>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+
+          <div className="mx-1"></div>
+
+          <div className="flex-1">
+            <Button
+              variant="outline"
+              className="w-full"
+              onClick={() => setOpen(false)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      </div>
+    </ResponsiveDialog>
   );
 }

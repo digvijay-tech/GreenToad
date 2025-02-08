@@ -5,17 +5,9 @@ import { useToast } from "@/hooks/use-toast";
 import { successToast } from "@/utils/toasts";
 import { colors } from "@/utils/constants/colors";
 import { changeCoverByIdAction } from "../actions";
+import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
@@ -78,66 +70,55 @@ export function ChangeCoverDialog({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent
-        className="sm:max-w-[425px]"
-        onInteractOutside={(e) => e.preventDefault()}
+    <ResponsiveDialog
+      open={open}
+      setOpen={setOpen}
+      title="Change Board Cover"
+      description="Lorem ipsum dolor sit amet consectetur adipisicing elit."
+      persistOnInteraction
+    >
+      {/* Error Display */}
+      {error && (
+        <Alert variant="destructive" className="mb-2">
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      )}
+
+      <Select
+        value={selectedColor}
+        onValueChange={setSelectedColor}
+        disabled={isLoading}
+        required
       >
-        <DialogHeader>
-          <DialogTitle>Change Board Cover</DialogTitle>
-          <DialogDescription>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed rem nam
-            hic quidem ut.
-          </DialogDescription>
-        </DialogHeader>
+        <SelectTrigger className="w-inherit">
+          <SelectValue placeholder="Select a color" />
+        </SelectTrigger>
 
-        <Separator />
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Available Colors:</SelectLabel>
+            {colors.map((c, i) => (
+              <SelectItem key={i} value={c.code}>
+                <span className="flex items-center">
+                  <CircleIcon className="mr-4" style={{ color: c.code }} />
+                  {c.label}
+                </span>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
 
-        {/* Error Display */}
-        {error && (
-          <Alert variant="destructive">
-            <AlertTitle>Error</AlertTitle>
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-        <div>
-          <Select
-            value={selectedColor}
-            onValueChange={setSelectedColor}
-            disabled={isLoading}
-            required
-          >
-            <SelectTrigger className="w-inherit">
-              <SelectValue placeholder="Select a color" />
-            </SelectTrigger>
-
-            <SelectContent>
-              <SelectGroup>
-                <SelectLabel>Available Colors:</SelectLabel>
-                {colors.map((c, i) => (
-                  <SelectItem key={i} value={c.code}>
-                    <span className="flex items-center">
-                      <CircleIcon className="mr-4" style={{ color: c.code }} />
-                      {c.label}
-                    </span>
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <DialogFooter className="mt-3">
-          <LoadingStateButtonWithText
-            isLoading={isLoading}
-            text="Save"
-            type="button"
-            variant="default"
-            onClick={handleChange}
-          />
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      <div className="mt-3">
+        <LoadingStateButtonWithText
+          isLoading={isLoading}
+          text="Save"
+          type="button"
+          variant="default"
+          onClick={handleChange}
+        />
+      </div>
+    </ResponsiveDialog>
   );
 }
