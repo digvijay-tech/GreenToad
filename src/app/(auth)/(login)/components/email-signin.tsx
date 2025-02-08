@@ -3,12 +3,11 @@
 import Link from "next/link";
 import React, { useState } from "react";
 import { signInAction } from "@/actions/auth";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { isEmail } from "validator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import EmailIcon from "@mui/icons-material/Email";
-import { Loader2 } from "lucide-react";
 
 export function EmailSignIn() {
   const [email, setEmail] = useState<string | null>(null);
@@ -113,17 +112,13 @@ export function EmailSignIn() {
           </Link>
         </div>
         <div className="text-left mt-4">
-          {isLoading ? (
-            <Button className="w-full py-5" disabled>
-              <Loader2 className="animate-spin !size-5" />
-              <p className="text-md">Loading..</p>
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full py-5">
-              <EmailIcon className="!size-6" />
-              <p className="text-md">Continue with Email</p>
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            icon={EmailIcon}
+            type="submit"
+            variant="default"
+            text="Continue with Email"
+          />
         </div>
 
         <div className="text-center mt-3">

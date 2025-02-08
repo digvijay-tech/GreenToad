@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { redirect } from "next/navigation";
 import { deleteBoardByIdAction } from "../actions";
 import { successToast } from "@/utils/toasts";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,7 +16,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
 
 export function DeleteDialog({
   open,
@@ -75,22 +75,13 @@ export function DeleteDialog({
         <DialogFooter className="mt-3">
           <div className="w-full flex flex-row justify-between items-center">
             <div className="flex-1">
-              {isLoading ? (
-                <Button className="w-full select-none" disabled>
-                  <Loader2 className="animate-spin" />
-                  Loading..
-                </Button>
-              ) : (
-                <Button
-                  type="button"
-                  variant="destructive"
-                  className="w-full select-none"
-                  disabled={isLoading}
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
-              )}
+              <LoadingStateButtonWithText
+                isLoading={isLoading}
+                type="button"
+                variant="destructive"
+                text="Delete"
+                onClick={handleDelete}
+              />
             </div>
 
             <div className="mx-1"></div>

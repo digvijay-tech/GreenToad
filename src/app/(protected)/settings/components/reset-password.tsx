@@ -7,6 +7,7 @@ import { authenticateAndResetPasswordAction } from "../actions/index";
 import { useToast } from "@/hooks/use-toast";
 import { isValidPassword } from "@/utils/validators/index";
 import { errorToast, successToast } from "@/utils/toasts";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import {
   Card,
   CardHeader,
@@ -17,8 +18,6 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 
 export function ResetPassword() {
   const router = useRouter();
@@ -154,20 +153,12 @@ export function ResetPassword() {
           </div>
 
           <div className="mt-3">
-            {isLoading ? (
-              <Button className="w-full md:w-auto select-none" disabled>
-                <Loader2 className="animate-spin" />
-                Loading..
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                className="w-full md:w-auto select-none"
-                disabled={!isEmailProvider}
-              >
-                Change Password
-              </Button>
-            )}
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="submit"
+              variant="default"
+              text="Change Password"
+            />
           </div>
         </form>
       </CardContent>

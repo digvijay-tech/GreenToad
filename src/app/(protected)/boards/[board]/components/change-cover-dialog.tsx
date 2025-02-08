@@ -5,9 +5,9 @@ import { useToast } from "@/hooks/use-toast";
 import { successToast } from "@/utils/toasts";
 import { colors } from "@/utils/constants/colors";
 import { changeCoverByIdAction } from "../actions";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
 import CircleIcon from "@mui/icons-material/Circle";
 
 interface ChangeCoverDialogProps {
@@ -130,21 +129,13 @@ export function ChangeCoverDialog({
         </div>
 
         <DialogFooter className="mt-3">
-          {isLoading ? (
-            <Button className="w-full md:w-auto select-none" disabled>
-              <Loader2 className="animate-spin" />
-              Loading..
-            </Button>
-          ) : (
-            <Button
-              type="button"
-              className="w-full md:w-auto select-none"
-              disabled={isLoading}
-              onClick={handleChange}
-            >
-              Save
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            text="Save"
+            type="button"
+            variant="default"
+            onClick={handleChange}
+          />
         </DialogFooter>
       </DialogContent>
     </Dialog>

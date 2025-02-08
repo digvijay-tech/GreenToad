@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { createWorkspaceAction } from "../actions/index";
 import { useUserProfileContext } from "@/contexts/profile/index";
 import { successToast, errorToast } from "@/utils/toasts/index";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import {
   Card,
   CardHeader,
@@ -15,8 +16,6 @@ import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
 
 export function CreateWorkspace() {
   const { toast } = useToast();
@@ -81,16 +80,12 @@ export function CreateWorkspace() {
             />
           </div>
           <div className="mt-3">
-            {isLoading ? (
-              <Button className="w-full md:w-auto select-none" disabled>
-                <Loader2 className="animate-spin" />
-                Loading..
-              </Button>
-            ) : (
-              <Button type="submit" className="w-full md:w-auto select-none">
-                Create
-              </Button>
-            )}
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="submit"
+              variant="default"
+              text="Create"
+            />
           </div>
         </form>
       </CardContent>

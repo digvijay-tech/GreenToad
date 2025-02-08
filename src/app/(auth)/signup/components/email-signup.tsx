@@ -6,11 +6,11 @@ import { isEmail } from "validator";
 import { isValidPassword } from "@/utils/validators";
 import { PASSWORD_MAXLEN, PASSWORD_MINLEN } from "@/utils/constants/password";
 import { signUpAction } from "@/actions/auth";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2, CheckCheckIcon } from "lucide-react";
+import { AlertCircle, CheckCheckIcon } from "lucide-react";
 
 export function EmailSignUp() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -135,16 +135,12 @@ export function EmailSignUp() {
           />
         </div>
         <div className="mt-3">
-          {isLoading ? (
-            <Button className="w-full md:w-auto" disabled>
-              <Loader2 className="animate-spin" />
-              Loading..
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full md:w-auto">
-              Continue
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            type="submit"
+            variant="default"
+            text="Continue"
+          />
         </div>
       </form>
     </div>

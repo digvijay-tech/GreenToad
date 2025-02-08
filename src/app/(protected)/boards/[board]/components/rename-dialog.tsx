@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { renameBoardAction } from "../actions";
-import { Button } from "@/components/ui/button";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
@@ -14,7 +14,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2 } from "lucide-react";
 
 export function RenameDialog({
   open,
@@ -107,20 +106,12 @@ export function RenameDialog({
           </div>
 
           <DialogFooter className="mt-3">
-            {isLoading ? (
-              <Button className="w-full md:w-auto select-none" disabled>
-                <Loader2 className="animate-spin" />
-                Loading..
-              </Button>
-            ) : (
-              <Button
-                type="submit"
-                className="w-full md:w-auto select-none"
-                disabled={isLoading}
-              >
-                Save
-              </Button>
-            )}
+            <LoadingStateButtonWithText
+              isLoading={isLoading}
+              type="submit"
+              variant="default"
+              text="Save"
+            />
           </DialogFooter>
         </form>
       </DialogContent>

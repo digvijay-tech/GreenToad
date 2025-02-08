@@ -5,11 +5,11 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { isEmail } from "validator";
 import { forgotPasswordAction } from "@/actions/auth";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import EmailIcon from "@mui/icons-material/Email";
 
 export function ResetPasswordForm() {
@@ -85,17 +85,13 @@ export function ResetPasswordForm() {
           />
         </div>
         <div className="mt-3">
-          {isLoading ? (
-            <Button className="w-full" disabled>
-              <Loader2 className="animate-spin" />
-              Loading..
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full">
-              <EmailIcon className="!size-6" />
-              Send Email
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            icon={EmailIcon}
+            type="submit"
+            variant="default"
+            text="Send Email"
+          />
         </div>
         <div className="mt-3">
           <p className="">

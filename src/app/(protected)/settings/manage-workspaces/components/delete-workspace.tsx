@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { deleteWorkspaceAction } from "../actions/index";
 import { successToast, errorToast } from "@/utils/toasts";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -16,7 +17,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Loader2 } from "lucide-react";
 
 export function DeleteWorkspaceButton({
   workspaceId,
@@ -82,16 +82,13 @@ export function DeleteWorkspaceButton({
           </AlertDialogCancel>
 
           {/* Delete and Loading Button */}
-          {isLoading ? (
-            <Button className="w-full md:w-auto select-none" disabled>
-              <Loader2 className="animate-spin" />
-              Loading..
-            </Button>
-          ) : (
-            <Button onClick={handleDelete} variant="destructive">
-              Delete
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            type="button"
+            variant="destructive"
+            text="Delete"
+            onClick={handleDelete}
+          />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

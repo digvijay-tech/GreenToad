@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { createDeckAction } from "../actions";
 import { successToast } from "@/utils/toasts";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,7 @@ import {
   DialogHeader,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { PlusCircle, Loader2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 
 interface CreateDeckProps {
   workspaceId: string;
@@ -113,19 +114,12 @@ export function CreateDeck({ workspaceId, boardId, cb }: CreateDeckProps) {
 
             <DialogFooter>
               <div className="mt-3">
-                {isLoading ? (
-                  <Button className="w-full md:w-auto select-none" disabled>
-                    <Loader2 className="animate-spin" />
-                    Loading..
-                  </Button>
-                ) : (
-                  <Button
-                    type="submit"
-                    className="w-full md:w-auto select-none"
-                  >
-                    Create
-                  </Button>
-                )}
+                <LoadingStateButtonWithText
+                  isLoading={isLoading}
+                  type="submit"
+                  variant="default"
+                  text="Create"
+                />
               </div>
             </DialogFooter>
           </form>

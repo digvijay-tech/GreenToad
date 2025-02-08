@@ -4,11 +4,11 @@
 import React, { useState } from "react";
 import { isValidPassword } from "@/utils/validators";
 import { PASSWORD_MINLEN, PASSWORD_MAXLEN } from "@/utils/constants/password";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 export function RecoverForm() {
   const [createPassword, setCreatePassword] = useState<string | null>(null);
@@ -93,16 +93,12 @@ export function RecoverForm() {
         </div>
 
         <div className="mt-3">
-          {isLoading ? (
-            <Button type="button" className="w-full select-none" disabled>
-              <Loader2 className="animate-spin" />
-              Loading..
-            </Button>
-          ) : (
-            <Button type="submit" className="w-full select-none">
-              Submit
-            </Button>
-          )}
+          <LoadingStateButtonWithText
+            isLoading={isLoading}
+            type="submit"
+            variant="default"
+            text="Submit"
+          />
         </div>
       </form>
     </div>

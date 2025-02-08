@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { createBoardAction } from "../actions";
 import { isValidBoardName } from "@/utils/validators";
 import { colors } from "@/utils/constants/colors";
+import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { HeadingTwo } from "@/components/typography/headings";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { PlusCircleIcon, Loader2, AlertCircle } from "lucide-react";
+import { PlusCircleIcon, AlertCircle } from "lucide-react";
 import CircleIcon from "@mui/icons-material/Circle";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -176,20 +177,12 @@ export function BoardPageHeader({ cb }: { cb: () => void }) {
                 </div>
 
                 <div className="mt-3">
-                  {isLoading ? (
-                    <Button className="w-full md:w-auto select-none" disabled>
-                      <Loader2 className="animate-spin" />
-                      Loading..
-                    </Button>
-                  ) : (
-                    <Button
-                      type="submit"
-                      className="w-full md:w-auto select-none"
-                      disabled={isLoading}
-                    >
-                      Create
-                    </Button>
-                  )}
+                  <LoadingStateButtonWithText
+                    isLoading={isLoading}
+                    type="submit"
+                    variant="default"
+                    text="Create"
+                  />
                 </div>
               </form>
             </div>
