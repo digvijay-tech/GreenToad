@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { redirect } from "next/navigation";
-import { deleteBoardById } from "../actions";
+import { deleteBoardByIdAction } from "../actions";
 import { successToast } from "@/utils/toasts";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,7 @@ export function DeleteDialog({
   const handleDelete = async () => {
     setIsLoading(true);
 
-    const result = await deleteBoardById(boardId, workspaceId);
+    const result = await deleteBoardByIdAction(boardId, workspaceId);
 
     if (result instanceof Error) {
       setIsLoading(false);

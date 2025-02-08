@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { renameBoard } from "../actions";
+import { renameBoardAction } from "../actions";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -54,7 +54,7 @@ export function RenameDialog({
     }
 
     // handle api call
-    const result = await renameBoard(name, workspaceId, boardId);
+    const result = await renameBoardAction(name, workspaceId, boardId);
 
     if (result instanceof Error) {
       setError(result.message);

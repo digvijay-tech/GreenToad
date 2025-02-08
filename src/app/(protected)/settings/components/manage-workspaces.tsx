@@ -19,7 +19,7 @@ export function ManageWorkspacesButton() {
   const [availableWorkspaces, setAvailableWorkspaces] = useState<
     WorkspaceType[] | null
   >(null);
-  const [totalWorkspaces, setTotalWorkspaces] = useState(0);
+  const [totalWorkspaces, setTotalWorkspaces] = useState<number>(0);
 
   // on load and workspace context change
   useEffect(() => {

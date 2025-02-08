@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { successToast } from "@/utils/toasts";
 import { colors } from "@/utils/constants/colors";
-import { changeCoverById } from "../actions";
+import { changeCoverByIdAction } from "../actions";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -28,19 +28,21 @@ import {
 import { Loader2 } from "lucide-react";
 import CircleIcon from "@mui/icons-material/Circle";
 
+interface ChangeCoverDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  background: string;
+  boardId: string;
+  workspaceId: string;
+}
+
 export function ChangeCoverDialog({
   open,
   setOpen,
   background,
   boardId,
   workspaceId,
-}: {
-  open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  background: string;
-  boardId: string;
-  workspaceId: string;
-}) {
+}: ChangeCoverDialogProps) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -56,7 +58,11 @@ export function ChangeCoverDialog({
     }
 
     // handle api call
-    const result = await changeCoverById(boardId, workspaceId, selectedColor);
+    const result = await changeCoverByIdAction(
+      boardId,
+      workspaceId,
+      selectedColor,
+    );
 
     if (result instanceof Error) {
       setError(result.message);
@@ -81,7 +87,8 @@ export function ChangeCoverDialog({
         <DialogHeader>
           <DialogTitle>Change Board Cover</DialogTitle>
           <DialogDescription>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed rem nam
+            hic quidem ut.
           </DialogDescription>
         </DialogHeader>
 

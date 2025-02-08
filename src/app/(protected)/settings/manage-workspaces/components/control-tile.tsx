@@ -1,15 +1,23 @@
 "use client";
 
 import moment from "moment";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { renameWorkspaceAction } from "../actions";
-import { DeleteWorkspaceButton } from "./deleteWorkspace";
+import { DeleteWorkspaceButton } from "./delete-workspace";
 import { successToast, errorToast } from "@/utils/toasts";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
+interface WorkspaceControlTileProps {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string;
+  currentWorkspaceId: string;
+}
 
 export function WorkspaceControlTile({
   id,
@@ -17,17 +25,18 @@ export function WorkspaceControlTile({
   created_at,
   updated_at,
   currentWorkspaceId,
-}) {
+}: WorkspaceControlTileProps) {
   const { toast } = useToast();
   const { removeUserProfileContext } = useUserProfileContext();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [workspaceName, setWorkspaceName] = useState(name);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [workspaceName, setWorkspaceName] = useState<string>(name);
 
   // handle rename call and save/update state
-  const handleRename = async (e) => {
+  const handleRename = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setIsEditing(true);
 
     // validate new name
     if (workspaceName.length < 3 || workspaceName.length > 24) {
@@ -36,33 +45,26 @@ export function WorkspaceControlTile({
         "Name should be between 3 and 24 characters in length!",
       );
       setIsLoading(false);
+      setIsEditing(false);
       return;
     }
 
     // handle api call
-    try {
-      const result = await renameWorkspaceAction(workspaceName, id);
+    const result = await renameWorkspaceAction(workspaceName, id);
 
-      if (result instanceof Error) {
-        throw result;
-      }
-
-      // initiate profile + workspace context refetch
-      removeUserProfileContext();
+    if (result instanceof Error) {
+      setWorkspaceName(name);
+      errorToast(toast, result.message);
       setIsLoading(false);
-      setIsEditing(false); // togggle button from save to edit
-      successToast(toast, "Workspace name updated!");
-    } catch (e) {
-      setIsLoading(false);
-
-      if (e instanceof Error) {
-        errorToast(toast, e.message);
-        return;
-      } else {
-        errorToast(toast, "Something went wrong!");
-        return;
-      }
+      setIsEditing(false);
+      return;
     }
+
+    // initiate profile + workspace context refetch
+    removeUserProfileContext();
+    setIsLoading(false);
+    setIsEditing(false); // togggle button from save to edit
+    successToast(toast, result);
   };
 
   return (
@@ -141,8 +143,8 @@ export function WorkspaceControlTile({
 
         {currentWorkspaceId === id && (
           <p className="text-xs select-none text-justify text-muted-foreground mt-2">
-            Note: You can't delete this workspace as it is currently active.
-            Please switch to another workspace to proceed with deletion.
+            Note: You can&apos;t delete this workspace as it is currently
+            active. Please switch to another workspace to proceed with deletion.
           </p>
         )}
 

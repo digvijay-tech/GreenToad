@@ -7,12 +7,12 @@ import { createClient } from "@/config/supabase/server";
  *
  * @param {string} newName - The new workspace name.
  * @param {string} workspaceId - The ID of the workspace to rename.
- * @returns {Promise<Error | null>} Returns `null` on success or an `Error` on failure.
+ * @returns {Promise<Error | string>} Returns `null` on success or an `Error` on failure.
  **/
 export const renameWorkspaceAction = async (
   newName: string,
   workspaceId: string,
-): Promise<Error | null> => {
+): Promise<Error | string> => {
   const supabase = await createClient();
 
   // authenticate user
@@ -25,28 +25,36 @@ export const renameWorkspaceAction = async (
   // update workspace name
   const { error: updateError } = await supabase
     .from("workspaces")
-    .update({ name: newName })
+    .update({
+      name: newName,
+      updated_at: new Date().toISOString(),
+    })
     .eq("id", workspaceId);
 
   if (updateError) {
+    // check for duplicate error
+    if (updateError.message.includes("unique_user_workspace_name")) {
+      return new Error("Workspace with that name already exists!");
+    }
+
     return new Error(updateError.message);
   }
 
-  return null;
+  return "Workspace updated!";
 };
 
 /**
  * Deletes a workspace if the user is authenticated.
  *
  * @param {string} workspaceId - The ID of the workspace to delete.
- * @returns {Promise<Error | null>} Returns `null` on success or an `Error` on failure.
+ * @returns {Promise<Error | string>} Returns `null` on success or an `Error` on failure.
  **/
 export const deleteWorkspaceAction = async (
   workspaceId: string,
-): Promise<Error | null> => {
+): Promise<Error | string> => {
   const supabase = await createClient();
 
-  // authenticate user
+  // authenticating user
   const { error: authError } = await supabase.auth.getUser();
 
   if (authError) {
@@ -63,5 +71,5 @@ export const deleteWorkspaceAction = async (
     return new Error(deletionError.message);
   }
 
-  return null;
+  return "Workspace deleted!";
 };

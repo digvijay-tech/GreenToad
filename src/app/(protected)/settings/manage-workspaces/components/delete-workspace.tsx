@@ -18,11 +18,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Loader2 } from "lucide-react";
 
-export function DeleteWorkspaceButton({ workspaceId }) {
+export function DeleteWorkspaceButton({
+  workspaceId,
+}: {
+  workspaceId: string;
+}) {
   const { toast } = useToast();
   const { removeUserProfileContext } = useUserProfileContext();
-  const [open, setOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleDelete = async () => {
     setIsLoading(true);
@@ -35,29 +39,19 @@ export function DeleteWorkspaceButton({ workspaceId }) {
     }
 
     // handle api call
-    try {
-      const result = await deleteWorkspaceAction(workspaceId);
+    const result = await deleteWorkspaceAction(workspaceId);
 
-      if (result instanceof Error) {
-        throw result;
-      }
-
-      // initiate profile + workspace context refetch
-      removeUserProfileContext();
+    if (result instanceof Error) {
+      errorToast(toast, result.message);
       setIsLoading(false);
-      setOpen(false); // close alert dialog
-      successToast(toast, "Workspace deleted!");
-    } catch (e) {
-      setIsLoading(false);
-
-      if (e instanceof Error) {
-        errorToast(toast, e.message);
-        return;
-      } else {
-        errorToast(toast, "Something went wrong, please try again later!");
-        return;
-      }
+      return;
     }
+
+    // initiate profile + workspace context refetch
+    removeUserProfileContext();
+    setIsLoading(false);
+    setOpen(false); // close alert dialog
+    successToast(toast, result);
   };
 
   return (

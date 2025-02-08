@@ -5,10 +5,10 @@ import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { UserProfileType } from "@/contexts/profile/types";
 import { BoardType } from "../actions/types";
-import { getBoardById } from "../actions";
+import { getBoardByIdAction } from "../actions";
 import { BoardHeader } from "./header";
 import { errorToast } from "@/utils/toasts";
-import { DeckList } from "./deckList";
+import { DeckList } from "./deck-list";
 
 export function BoardPageWrapper({ boardId }: { boardId: string }) {
   const { toast } = useToast();
@@ -31,7 +31,7 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
       if (profileResult) {
         setUserProfile(profileResult);
 
-        const boardResult = await getBoardById(
+        const boardResult = await getBoardByIdAction(
           boardId,
           profileResult.default_workspace_id,
         );

@@ -10,10 +10,10 @@ import { parseLogEntry } from "@/utils/format-utils/logs";
  * @param {string} background - Background for the board.
  * @returns {Promise<Error | string>} - Success message or an Error object.
  **/
-export const createBoard = async (
+export const createBoardAction = async (
   name: string,
   background: string,
-): Promise<Error | null> => {
+): Promise<Error | string> => {
   const supabase = await createClient();
 
   // getting user object from supabase for log entry
@@ -54,7 +54,7 @@ export const createBoard = async (
     return new Error(InsertionError.message);
   }
 
-  return null;
+  return "Board created!";
 };
 
 /**
@@ -63,7 +63,7 @@ export const createBoard = async (
  * @returns {Promise<unknown>} - An array of boards or an Error object if the operation fails.
  *
  **/
-export const fetchBoards = async (): Promise<Error | unknown[]> => {
+export const fetchBoardsAction = async (): Promise<Error | unknown[]> => {
   const supabase = await createClient();
 
   // getting user id

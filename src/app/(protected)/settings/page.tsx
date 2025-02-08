@@ -1,7 +1,7 @@
 import { HeadingTwo } from "@/components/typography/headings";
-import { ResetPassword } from "./components/resetPassword";
-import { CreateWorkspace } from "./components/createWorkspace";
-import { ManageWorkspacesButton } from "./components/manageWorkspaces";
+import { ResetPassword } from "./components/reset-password";
+import { CreateWorkspace } from "./components/create-workspace";
+import { ManageWorkspacesButton } from "./components/manage-workspaces";
 
 export default function Settings() {
   return (

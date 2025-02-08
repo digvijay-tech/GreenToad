@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/config/supabase/server";
-import { AuthError } from "@supabase/supabase-js";
 
 /**
  * authenticateAndResetPassword - Verifies the user's current password, updates it to a new password,
@@ -11,13 +10,13 @@ import { AuthError } from "@supabase/supabase-js";
  * @param currentPassword - The current password for authentication.
  * @param newPassword - The new password to set.
  *
- * @returns {Promise<AuthError | string>} - A success message or an error if any step fails.
+ * @returns {Promise<Error | string>} - A success message or an error if any step fails.
  **/
-export const authenticateAndResetPassword = async (
+export const authenticateAndResetPasswordAction = async (
   email: string,
   currentPassword: string,
   newPassword: string,
-): Promise<AuthError | string> => {
+): Promise<Error | string> => {
   const supabase = await createClient();
 
   // Verify current password by signing in with it
@@ -27,7 +26,7 @@ export const authenticateAndResetPassword = async (
   });
 
   if (signInError) {
-    return signInError;
+    return new Error(signInError.message);
   }
 
   // Update the password
@@ -36,7 +35,7 @@ export const authenticateAndResetPassword = async (
   });
 
   if (updateError) {
-    return updateError;
+    return new Error(updateError.message);
   }
 
   // Revoke all other sessions
@@ -45,10 +44,10 @@ export const authenticateAndResetPassword = async (
   });
 
   if (revokeError) {
-    return revokeError;
+    return new Error(revokeError.message);
   }
 
-  return "Password Changed! Please login again.";
+  return "Password updated, please login again.";
 };
 
 /**
@@ -60,7 +59,9 @@ export const authenticateAndResetPassword = async (
  * @param {string} name - The name of the new workspace.
  * @returns {Error | null} - Returns an error if something goes wrong, otherwise null if the workspace is created successfully.
  **/
-export const createWorkspace = async (name: string): Promise<Error | null> => {
+export const createWorkspaceAction = async (
+  name: string,
+): Promise<Error | null> => {
   const supabase = await createClient();
 
   // authenticate and get user id

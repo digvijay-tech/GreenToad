@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { BoardChangesType, BoardType } from "../actions/types";
-import { toggleIsClosedOption } from "../actions";
-import { RenameDialog } from "./renameDialog";
-import { DeleteDialog } from "./deleteDialog";
-import { ChangesDialog } from "./changesDialog";
-import { ChangeCoverDialog } from "./changeCoverDialog";
+import { toggleIsClosedOptionAction } from "../actions";
+import { RenameDialog } from "./rename-dialog";
+import { DeleteDialog } from "./delete-dialog";
+import { ChangesDialog } from "./changes-dialog";
+import { ChangeCoverDialog } from "./change-cover-dialog";
 import { successToast, errorToast } from "@/utils/toasts";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +43,7 @@ export function BoardHeader({
 
   // toggle isClosed option
   const handleIsCloseToggle = async () => {
-    const result = await toggleIsClosedOption(
+    const result = await toggleIsClosedOptionAction(
       board.is_closed,
       workspaceId,
       board.id,

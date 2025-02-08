@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { createBoard } from "../actions";
+import React, { useState, useEffect } from "react";
+import { createBoardAction } from "../actions";
 import { isValidBoardName } from "@/utils/validators";
 import { colors } from "@/utils/constants/colors";
 import { HeadingTwo } from "@/components/typography/headings";
@@ -32,12 +32,12 @@ import CloseIcon from "@mui/icons-material/Close";
 {
   /* Page Heading and Create Board Button */
 }
-export function BoardPageHeader({ cb }) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [error, setError] = useState(null);
-  const [boardName, setBoardName] = useState("");
-  const [selectedColor, setSelectedColor] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+export function BoardPageHeader({ cb }: { cb: () => void }) {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [boardName, setBoardName] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // close dialog and remove all states
   const handleDialogClose = () => {
@@ -47,12 +47,12 @@ export function BoardPageHeader({ cb }) {
     setIsOpen(false);
   };
 
-  const handleCreate = async (e) => {
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     // validate name
-    if (!isValidBoardName(boardName)) {
+    if (!isValidBoardName(boardName.trim())) {
       setError(
         "The name must be between 2 and 36 characters in length. Please try again.",
       );
@@ -60,14 +60,18 @@ export function BoardPageHeader({ cb }) {
       return;
     }
 
-    // handle api call
-    try {
-      const result = await createBoard(boardName.trim(), selectedColor);
+    // when color is missing
+    if (!selectedColor) {
+      setError("Please select a color!");
+      setIsLoading(false);
+      return;
+    }
 
-      // any error encountered in creatBoard
-      if (result instanceof Error) throw result;
-    } catch (e) {
-      setError(e.message);
+    // handle api call
+    const result = await createBoardAction(boardName.trim(), selectedColor);
+
+    if (result instanceof Error) {
+      setError(result.message);
       setIsLoading(false);
       return;
     }
@@ -88,7 +92,7 @@ export function BoardPageHeader({ cb }) {
       <HeadingTwo text="Boards" />
 
       <div>
-        <Dialog open={isOpen} onChange={setIsOpen}>
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
           {/* Dialog Trigger for Open */}
           <Button
             onClick={() => setIsOpen(true)}
@@ -143,7 +147,7 @@ export function BoardPageHeader({ cb }) {
                 <div className="mt-3">
                   <Label htmlFor="bgInput">Choose Cover</Label>
                   <Select
-                    value={selectedColor}
+                    value={!selectedColor ? "" : selectedColor}
                     onValueChange={setSelectedColor}
                     disabled={isLoading}
                     required

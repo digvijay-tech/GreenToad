@@ -13,7 +13,7 @@ import { parseLogEntry } from "@/utils/format-utils/logs";
  * @param {string} workspaceId - The unique identifier of the workspace the board belongs to.
  * @returns {Promise<Error | BoardType[]>} - Returns a BoardType array if found, otherwise an Error.
  **/
-export const getBoardById = async (
+export const getBoardByIdAction = async (
   boardId: string,
   workspaceId: string,
 ): Promise<Error | BoardType[]> => {
@@ -58,7 +58,7 @@ export const getBoardById = async (
  * @param {string} boardId - The unique identifier of the board to update.
  * @returns {Promise<Error | string>} - Returns a success message if updated, otherwise an Error.
  **/
-export const toggleIsClosedOption = async (
+export const toggleIsClosedOptionAction = async (
   isClosed: boolean,
   workspaceId: string,
   boardId: string,
@@ -85,7 +85,7 @@ export const toggleIsClosedOption = async (
 };
 
 /**
- * Renames a board in a workspace and record the change.
+ * Renames a board in a workspace and record the changes.
  *
  * @param {string} newName - The new board name.
  * @param {string} workspaceId - The workspace ID.
@@ -93,7 +93,7 @@ export const toggleIsClosedOption = async (
  * @returns {Promise<Error | string>} - Success message or error.
  *
  **/
-export const renameBoard = async (
+export const renameBoardAction = async (
   newName: string,
   workspaceId: string,
   boardId: string,
@@ -122,7 +122,7 @@ export const renameBoard = async (
     .single();
 
   if (queryError) {
-    return new Error("Logging failed, please try again later!");
+    return new Error("Operation failed, please try again later!");
   }
 
   // extracting the current changes (if any) and appending the new log entry
@@ -151,7 +151,7 @@ export const renameBoard = async (
  * @param {string} workspaceId - The ID of the workspace the board belongs to.
  * @returns {Promise<Error | string>} - A success message if deleted, or an error if the operation fails.
  **/
-export const deleteBoardById = async (
+export const deleteBoardByIdAction = async (
   boardId: string,
   workspaceId: string,
 ): Promise<Error | string> => {
@@ -186,7 +186,7 @@ export const deleteBoardById = async (
  * @param {string} newColorCode - The new color code to set as the board's cover.
  * @returns {Promise<Error | string>} - Returns a success message or an error if the update fails.
  **/
-export const changeCoverById = async (
+export const changeCoverByIdAction = async (
   boardId: string,
   workspaceId: string,
   newColorCode: string,
@@ -220,7 +220,7 @@ export const changeCoverById = async (
  * @param {string} name - The name of the new deck.
  * @returns {Promise<Error | string>} - Returns a success message or an error if the operation fails.
  **/
-export const createDeck = async (
+export const createDeckAction = async (
   workspaceId: string,
   boardId: string,
   name: string,
@@ -278,7 +278,7 @@ export const createDeck = async (
  * Authentication is not required since RLS SELECT policies are configured on the database to allow safe access.
  * If there is an issue during the query execution (e.g., network error or query failure), an Error object is returned.
  */
-export const fetchDecksByBoardId = async (
+export const fetchDecksByBoardIdAction = async (
   boardId: string,
   workspaceId: string,
 ): Promise<Error | BoardDeckType[]> => {
@@ -310,7 +310,7 @@ export const fetchDecksByBoardId = async (
  * This function uses the Supabase `upsert` operation to update the `decks` table. If a deck with the same `id` already exists, it will be updated with the new values (e.g., `order`, `name`). If no matching record is found, a new deck is inserted.
  * The `onConflict: "id"` option ensures that the `id` field is used to detect conflicts (i.e., it updates existing records with matching IDs).
  **/
-export const updateDeckOrder = async (
+export const updateDeckOrderAction = async (
   decks: BoardDeckType[],
 ): Promise<Error | null> => {
   const supabase = await createClient();

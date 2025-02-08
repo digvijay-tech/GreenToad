@@ -2,14 +2,17 @@
 
 import { useState, useEffect } from "react";
 import { useUserProfileContext } from "@/contexts/profile";
+import { WorkspaceType, UserProfileType } from "@/contexts/profile/types";
 import { HeadingTwo } from "@/components/typography/headings";
-import { WorkspaceControlTile } from "./components/controlTile";
+import { WorkspaceControlTile } from "./components/control-tile";
 
 export default function ManageWorkspaces() {
   const { workspaces, getWorkspaces, profile, getProfile } =
     useUserProfileContext();
-  const [availableWorkspaces, setAvailableWorkspaces] = useState(null);
-  const [userProfile, setUserProfile] = useState(null);
+  const [availableWorkspaces, setAvailableWorkspaces] = useState<
+    WorkspaceType[] | null
+  >(null);
+  const [userProfile, setUserProfile] = useState<UserProfileType | null>(null);
 
   // on load and workspace change
   useEffect(() => {

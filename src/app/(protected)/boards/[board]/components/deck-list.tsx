@@ -3,8 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Deck } from "./deck";
-import { CreateDeck } from "./createDeck";
-import { fetchDecksByBoardId, updateDeckOrder } from "../actions";
+import { CreateDeck } from "./create-deck";
+import { fetchDecksByBoardIdAction, updateDeckOrderAction } from "../actions";
 import { BoardDeckType } from "../actions/types";
 import { errorToast } from "@/utils/toasts";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -78,7 +78,7 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
   const fetchAndLoadDecks = async () => {
     setIsLoading(true);
 
-    const result = await fetchDecksByBoardId(boardId, workspaceId);
+    const result = await fetchDecksByBoardIdAction(boardId, workspaceId);
 
     if (result instanceof Error) {
       errorToast(toast, result.message);
@@ -94,7 +94,7 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
   useEffect(() => {
     (async function () {
       if (updatedDecksRef.current.length > 0) {
-        const result = await updateDeckOrder(updatedDecksRef.current);
+        const result = await updateDeckOrderAction(updatedDecksRef.current);
 
         if (result instanceof Error) {
           errorToast(toast, "Failed to update deck order.");

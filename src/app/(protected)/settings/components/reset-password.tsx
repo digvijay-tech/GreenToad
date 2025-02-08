@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserProfileContext } from "@/contexts/profile/index";
-import { authenticateAndResetPassword } from "../actions/index";
+import { authenticateAndResetPasswordAction } from "../actions/index";
 import { useToast } from "@/hooks/use-toast";
 import { isValidPassword } from "@/utils/validators/index";
-import { errorToast } from "@/utils/toasts";
+import { errorToast, successToast } from "@/utils/toasts";
 import {
   Card,
   CardHeader,
@@ -24,19 +24,24 @@ export function ResetPassword() {
   const router = useRouter();
   const { toast } = useToast();
   const { user, getUser, removeUserProfileContext } = useUserProfileContext();
-  const [isEmailProvider, setIsEmailProvider] = useState(false);
-  const [email, setEmail] = useState(null);
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [createPassword, setCreatePassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isEmailProvider, setIsEmailProvider] = useState<boolean>(false);
+  const [email, setEmail] = useState<string | null>(null);
+  const [currentPassword, setCurrentPassword] = useState<string>("");
+  const [createPassword, setCreatePassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   // authenticates with supabase and updates password
-  const handlePasswordReset = async (e) => {
+  const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // start loading state
     setIsLoading(true);
+
+    // when email is missing
+    if (!email) {
+      errorToast(toast, "Couldn't get email, please logout and try again!");
+      setIsLoading(false);
+      return;
+    }
 
     // validating password inputs
     if (!isValidPassword(currentPassword)) {
@@ -59,40 +64,24 @@ export function ResetPassword() {
     }
 
     // authenticating and updating password
-    try {
-      const result = await authenticateAndResetPassword(
-        email,
-        currentPassword,
-        confirmPassword,
-      );
+    const result = await authenticateAndResetPasswordAction(
+      email,
+      currentPassword,
+      confirmPassword,
+    );
 
-      // checking if result is type of error
-      if (result instanceof Error) {
-        throw result;
-      }
-
-      // on success, remove user state and redirect to login
-      removeUserProfileContext();
-
-      toast({
-        title: "Success",
-        description: result,
-        style: {
-          color: "#2ecc71",
-          textAlign: "justify",
-        },
-      });
-
-      // redirecting user back to login page
-      router.push("/");
-    } catch (e) {
-      console.log(e);
-      if (!e.message) {
-        errorToast(toast, "Something went wrong!");
-      } else {
-        errorToast(toast, e.message);
-      }
+    if (result instanceof Error) {
+      errorToast(toast, result.message);
+      setIsLoading(false);
+      return;
     }
+
+    // on success, remove user state and redirect to login
+    removeUserProfileContext();
+    successToast(toast, result);
+
+    // redirecting user back to login page
+    router.push("/");
 
     // clear all fields
     setCurrentPassword("");

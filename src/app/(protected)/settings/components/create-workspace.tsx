@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { createWorkspace } from "../actions/index";
+import React, { useState } from "react";
+import { createWorkspaceAction } from "../actions/index";
 import { useUserProfileContext } from "@/contexts/profile/index";
 import { successToast, errorToast } from "@/utils/toasts/index";
 import {
@@ -24,7 +24,7 @@ export function CreateWorkspace() {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleCreateWorkspace = async (e) => {
+  const handleCreateWorkspace = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
@@ -39,25 +39,19 @@ export function CreateWorkspace() {
     }
 
     // handle api call
-    try {
-      const result = await createWorkspace(name);
+    const result = await createWorkspaceAction(name);
 
-      if (result instanceof Error) {
-        throw result;
-      }
-
-      // displaying success message and removing current profile context
-      // to load changes made in workspaces table
-      successToast(toast, "Workspace created!");
-      removeUserProfileContext();
-    } catch (e) {
-      if (e instanceof Error) {
-        errorToast(toast, e.message);
-      } else {
-        errorToast(toast, "Something went wrong!");
-        console.log("From Catch Unknown!", e);
-      }
+    if (result instanceof Error) {
+      errorToast(toast, result.message);
+      setName("");
+      setIsLoading(false);
+      return;
     }
+
+    // displaying success message and removing current profile context
+    // to load changes made in workspaces table
+    successToast(toast, "Workspace created!");
+    removeUserProfileContext();
 
     setName("");
     setIsLoading(false);

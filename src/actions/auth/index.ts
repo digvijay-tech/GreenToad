@@ -4,7 +4,7 @@ import { encodedRedirect } from "@/config/utils";
 import { createClient } from "@/config/supabase/server";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { AuthError, User } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 
 /**
  * Handles user signup by validating email and password, and interacting with Supabase to create a new user.
@@ -175,9 +175,9 @@ export const getAuthenticatedUserAction = async (): Promise<User | null> => {
 /**
  * Initiates OAuth sign-in with Respective Identity Provider via Supabase and redirects the user to the callback URL.
  *
- * @returns {void | string} - Redirects to Identity Provider for authentication or returns an error if the sign-in fails.
+ * @returns {Error | void} - Redirects to Identity Provider for authentication or returns an error if the sign-in fails.
  **/
-export const signInWithGithubAction = async (): Promise<AuthError | void> => {
+export const signInWithGithubAction = async (): Promise<Error | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -189,13 +189,13 @@ export const signInWithGithubAction = async (): Promise<AuthError | void> => {
   });
 
   if (error) {
-    return error;
+    return new Error(error.message);
   }
 
   redirect(data.url);
 };
 
-export const signInWithAppleAction = async (): Promise<AuthError | void> => {
+export const signInWithAppleAction = async (): Promise<Error | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -207,13 +207,13 @@ export const signInWithAppleAction = async (): Promise<AuthError | void> => {
   });
 
   if (error) {
-    return error;
+    return new Error(error.message);
   }
 
   redirect(data.url);
 };
 
-export const signInWithGoogleAction = async (): Promise<AuthError | void> => {
+export const signInWithGoogleAction = async (): Promise<Error | void> => {
   const supabase = await createClient();
   const origin = (await headers()).get("origin");
 
@@ -225,7 +225,7 @@ export const signInWithGoogleAction = async (): Promise<AuthError | void> => {
   });
 
   if (error) {
-    return error;
+    return new Error(error.message);
   }
 
   redirect(data.url);

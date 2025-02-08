@@ -1,26 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { BoardType } from "../[board]/actions/types";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import LockIcon from "@mui/icons-material/Lock";
 
-export function BoardsList({ data }) {
-  const [searchInput, setSearchInput] = useState("");
-  const [boards, setBoards] = useState(null);
-  const [matchedBoards, setMatchedBoards] = useState([]);
+export function BoardsList({ data }: { data: unknown[] }) {
+  const [searchInput, setSearchInput] = useState<string>("");
+  const [boards, setBoards] = useState<unknown[] | null>(null);
+  const [matchedBoards, setMatchedBoards] = useState<BoardType[]>([]);
 
   // function to filter the matched keywords based on the search input
-  const getMatchedKeywords = (input) => {
-    const filteredKeywords = boards.filter((b) =>
+  const getMatchedKeywords = (input: string) => {
+    if (!boards) return;
+
+    const filteredKeywords = (boards as BoardType[]).filter((b) =>
       b.name.toLowerCase().includes(input.toLowerCase()),
     );
     setMatchedBoards(filteredKeywords);
   };
 
   // for the input change
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.toLowerCase();
     setSearchInput(value);
     getMatchedKeywords(value); // Update matched keywords based on search input
@@ -29,7 +32,7 @@ export function BoardsList({ data }) {
   // for loading boards in state
   useEffect(() => {
     setBoards(data);
-    setMatchedBoards(data);
+    setMatchedBoards(data as BoardType[]);
   }, [data]);
 
   return (
@@ -56,7 +59,8 @@ export function BoardsList({ data }) {
       {boards && boards.length < 1 && (
         <div className="mt-10">
           <p className="text-md text-center text-muted-foreground">
-            No boards found. Click the 'Create Board' button to add one.
+            No boards found. Click the &apos;Create Board&apos; button to add
+            one.
           </p>
         </div>
       )}
@@ -76,7 +80,7 @@ export function BoardsList({ data }) {
 
                 {/* Displaying Lock Icon if the board is marked as closed */}
                 <div className="flex flex-row justify-end">
-                  {board.isClosed && (
+                  {board.is_closed && (
                     <LockIcon className="h-3 w-3 opacity-90" />
                   )}
                 </div>

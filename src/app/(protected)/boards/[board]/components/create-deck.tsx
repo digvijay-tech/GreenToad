@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { createDeck } from "../actions";
+import { createDeckAction } from "../actions";
 import { successToast } from "@/utils/toasts";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -49,7 +49,7 @@ export function CreateDeck({ workspaceId, boardId, cb }: CreateDeckProps) {
       return;
     }
 
-    const result = await createDeck(workspaceId, boardId, name.trim());
+    const result = await createDeckAction(workspaceId, boardId, name.trim());
 
     if (result instanceof Error) {
       setError(result.message);

@@ -12,15 +12,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-export function ChangesDialog({
-  open,
-  setOpen,
-  changes,
-}: {
+interface ChangesDialogProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   changes: BoardChangesType[];
-}) {
+}
+
+export function ChangesDialog({ open, setOpen, changes }: ChangesDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent
