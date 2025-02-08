@@ -35,9 +35,9 @@ export function LoadingStateButtonWithText({
   onClick,
 }: LoadingStateButtonWithTextProps) {
   return (
-    <div className="text-left">
+    <div className="text-left select-none">
       {isLoading ? (
-        <Button className="w-full py-5" disabled>
+        <Button className="w-full py-4 cursor-not-allowed" disabled>
           <Loader2 className="animate-spin !size-5" />
           <p className="text-md">Loading..</p>
         </Button>
@@ -46,7 +46,7 @@ export function LoadingStateButtonWithText({
           type={type}
           variant={variant}
           onClick={onClick}
-          className="w-full py-5"
+          className="w-full py-4 cursor-pointer"
         >
           {Icon && <Icon className="!size-5" />}
           <p className="text-md">{text}</p>
