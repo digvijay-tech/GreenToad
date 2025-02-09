@@ -372,3 +372,37 @@ export const deleteDeckByIdAction = async (
 
   return "Deck is deleted!";
 };
+
+/**
+ * Renames a deck in the database using its unique identifier.
+ *
+ * @param {string} deckId - The unique identifier of the deck to be renamed.
+ * @param {string} newName - The new name to assign to the deck.
+ *
+ * @returns {Promise<Error | string>} A Promise that resolves to a success message if the rename is successful, or an Error if the update fails.
+ *
+ * This function updates the `name` and `updated_at` fields for a deck in the `decks` table via Supabase.
+ * Note: Authentication is not enforced for this operation at present but may be implemented in the future.
+ **/
+export const renameDeckById = async (
+  deckId: string,
+  newName: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // Note: Authentication not required for now, but will consider later!
+
+  const { error: updateError } = await supabase
+    .from("decks")
+    .update({
+      name: newName,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", deckId);
+
+  if (updateError) {
+    return new Error(updateError.message);
+  }
+
+  return "Deck updated!";
+};

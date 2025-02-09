@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
-export function RenameDialog({
+export function RenameBoardDialog({
   open,
   setOpen,
   boardName,

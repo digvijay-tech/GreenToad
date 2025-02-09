@@ -10,7 +10,7 @@ import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loa
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 
-export function DeleteDialog({
+export function DeleteBoardDialog({
   open,
   setOpen,
   boardId,

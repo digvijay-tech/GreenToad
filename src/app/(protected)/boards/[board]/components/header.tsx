@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { BoardChangesType, BoardType } from "../actions/types";
 import { toggleIsClosedOptionAction } from "../actions";
-import { RenameDialog } from "./rename-dialog";
-import { DeleteDialog } from "./delete-dialog";
+import { RenameBoardDialog } from "./rename-board-dialog";
+import { DeleteBoardDialog } from "./delete-board-dialog";
 import { ChangesDialog } from "./changes-dialog";
 import { ChangeCoverDialog } from "./change-cover-dialog";
 import { successToast, errorToast } from "@/utils/toasts";
@@ -62,7 +62,7 @@ export function BoardHeader({
   return (
     <div>
       {/* Rename Board Dialog */}
-      <RenameDialog
+      <RenameBoardDialog
         boardId={board.id}
         workspaceId={workspaceId}
         boardName={board.name}
@@ -88,7 +88,7 @@ export function BoardHeader({
       />
 
       {/* Delete Board Dialog */}
-      <DeleteDialog
+      <DeleteBoardDialog
         open={isDeleteOpen}
         setOpen={setIsDeleteOpen}
         boardId={board.id}

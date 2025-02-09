@@ -5,6 +5,7 @@ import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { BoardDeckType } from "../actions/types";
 import { DeleteDeckDialog } from "./delete-deck-dialog";
+import { RenameDeckDialog } from "./rename-deck-dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,7 +26,7 @@ interface DeckProps {
 // Deck Component will work as Sortable Item
 export function Deck({ deck, cb }: DeckProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-  // const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
+  const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: deck.id });
@@ -42,6 +43,14 @@ export function Deck({ deck, cb }: DeckProps) {
         open={isDeleteOpen}
         setOpen={setIsDeleteOpen}
         deckId={deck.id}
+        cb={cb}
+      />
+
+      <RenameDeckDialog
+        open={isRenameOpen}
+        setOpen={setIsRenameOpen}
+        deckId={deck.id}
+        deckName={deck.name}
         cb={cb}
       />
 
@@ -73,7 +82,10 @@ export function Deck({ deck, cb }: DeckProps) {
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent className="w-46">
-                    <DropdownMenuItem className="cursor-pointer">
+                    <DropdownMenuItem
+                      onClick={() => setIsRenameOpen(true)}
+                      className="cursor-pointer"
+                    >
                       Rename
                     </DropdownMenuItem>
                     <DropdownMenuItem
