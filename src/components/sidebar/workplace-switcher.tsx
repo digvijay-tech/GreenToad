@@ -65,7 +65,7 @@ export function WorksplaceSwitcher() {
     setAvailableWorkspaces(workspaces);
 
     // find and set the current workspace set by user
-    if (workspaces) {
+    if (workspaces && profile) {
       workspaces.forEach((ws: WorkspaceType) => {
         if (profile.default_workspace_id === ws.id) {
           setSelectedWorkspace(ws);
