@@ -4,8 +4,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { Deck } from "./deck";
 import { CreateDeck } from "./create-deck";
-import { fetchDecksByBoardIdAction, updateDeckOrderAction } from "../actions";
-import { BoardDeckType } from "../actions/types";
+import { fetchDecksByBoardIdAction, updateDeckOrderAction } from "./actions";
+import { BoardDeckType } from "../../../types";
 import { errorToast } from "@/utils/toasts";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import {

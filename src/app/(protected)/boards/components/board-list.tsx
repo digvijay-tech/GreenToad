@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
-import { BoardType } from "../[board]/actions/types";
+import { BoardType } from "../types";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import LockIcon from "@mui/icons-material/Lock";

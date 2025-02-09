@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { renameBoardAction } from "../actions";
+import { renameBoardAction } from "./actions";
 import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Label } from "@/components/ui/label";

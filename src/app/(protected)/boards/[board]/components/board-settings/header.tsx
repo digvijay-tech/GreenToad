@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { BoardChangesType, BoardType } from "../actions/types";
-import { toggleIsClosedOptionAction } from "../actions";
+import { BoardChangesType, BoardType } from "../../../types";
+import { toggleIsClosedOptionAction } from "./actions";
 import { RenameBoardDialog } from "./rename-board-dialog";
 import { DeleteBoardDialog } from "./delete-board-dialog";
 import { ChangesDialog } from "./changes-dialog";

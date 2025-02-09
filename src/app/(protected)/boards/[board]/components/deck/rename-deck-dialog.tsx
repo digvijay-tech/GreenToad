@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { successToast } from "@/utils/toasts";
-import { renameDeckById } from "../actions";
+import { renameDeckById } from "./actions";
 import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Button } from "@/components/ui/button";

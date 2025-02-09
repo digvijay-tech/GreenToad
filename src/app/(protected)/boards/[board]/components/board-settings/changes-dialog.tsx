@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { BoardChangesType } from "../actions/types";
+import { BoardChangesType } from "../../../types";
 import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { ScrollArea } from "@/components/ui/scroll-area";

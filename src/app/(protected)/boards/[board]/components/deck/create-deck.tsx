@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { createDeckAction } from "../actions";
+import { createDeckAction } from "./actions";
 import { successToast } from "@/utils/toasts";
 import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";

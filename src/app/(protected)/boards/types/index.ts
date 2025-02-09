@@ -1,5 +1,4 @@
-// Local Types for Board Page
-
+// Local Types for Board Page and Sub Pages
 export interface BoardType {
   id: string;
   workspace_id: string;

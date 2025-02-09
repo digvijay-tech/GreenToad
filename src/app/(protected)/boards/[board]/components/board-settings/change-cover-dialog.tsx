@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { successToast } from "@/utils/toasts";
 import { colors } from "@/utils/constants/colors";
-import { changeCoverByIdAction } from "../actions";
+import { changeCoverByIdAction } from "./actions";
 import { ResponsiveDialog } from "@/components/responsive-dialog/responsive-dialog";
 import { LoadingStateButtonWithText } from "@/components/interactive-buttons/loading-state-button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";

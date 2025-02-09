@@ -4,11 +4,11 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useUserProfileContext } from "@/contexts/profile";
 import { UserProfileType } from "@/contexts/profile/types";
-import { BoardType } from "../actions/types";
+import { BoardType } from "../../types";
 import { getBoardByIdAction } from "../actions";
-import { BoardHeader } from "./header";
+import { BoardHeader } from "./board-settings/header";
 import { errorToast } from "@/utils/toasts";
-import { DeckList } from "./deck-list";
+import { DeckList } from "./deck/deck-list";
 
 export function BoardPageWrapper({ boardId }: { boardId: string }) {
   const { toast } = useToast();

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { BoardDeckType } from "../actions/types";
+import { BoardDeckType } from "../../../types";
 import { DeleteDeckDialog } from "./delete-deck-dialog";
 import { RenameDeckDialog } from "./rename-deck-dialog";
 import { Input } from "@/components/ui/input";
