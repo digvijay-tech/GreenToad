@@ -336,3 +336,39 @@ export const updateDeckOrderAction = async (
 
   return null;
 };
+
+/**
+ * Deletes a deck from the database using its unique ID.
+ *
+ * @param {string} deckId - The unique identifier of the deck to be deleted.
+ *
+ * @returns {Promise<Error | string>} A Promise that resolves to a success message if deletion is successful, or an Error if authentication or deletion fails.
+ *
+ * This function first authenticates the user via Supabase. It then deletes the deck from the `decks` table,
+ * ensuring the operation only affects the deck if it belongs to the authenticated user (RLS enforced using the `user_id` column).
+ **/
+export const deleteDeckByIdAction = async (
+  deckId: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // authenticate user before deletion
+  const { error: authError, data: authData } = await supabase.auth.getUser();
+
+  if (authError) {
+    return new Error(authError.message);
+  }
+
+  // initiate deletion
+  const { error: deletionError } = await supabase
+    .from("decks")
+    .delete()
+    .eq("id", deckId)
+    .eq("user_id", authData.user.id);
+
+  if (deletionError) {
+    return new Error(deletionError.message);
+  }
+
+  return "Deck is deleted!";
+};

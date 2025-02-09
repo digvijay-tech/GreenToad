@@ -35,7 +35,11 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
   const [decks, setDecks] = useState<BoardDeckType[]>([]);
   const updatedDecksRef = useRef<BoardDeckType[]>([]); // tracks updated decks
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
@@ -121,9 +125,9 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
   }
 
   return (
-    <div className="h-full flex">
+    <div className="h-full flex select-none">
       <ScrollArea className="h-full flex-1 w-1">
-        <div className="flex h-[calc(100vh-118px)] space-x-3 mx-2">
+        <div className="flex h-[calc(100vh-130px)] space-x-3 mx-2">
           {/* SORTABLE DECKS SECTION */}
           <DndContext
             sensors={sensors}
@@ -134,7 +138,10 @@ export function DeckList({ workspaceId, boardId }: DeckListProps) {
               items={decks ? decks.map((deck) => deck.id) : []}
               strategy={horizontalListSortingStrategy}
             >
-              {decks && decks.map((deck) => <Deck key={deck.id} {...deck} />)}
+              {decks &&
+                decks.map((deck) => (
+                  <Deck key={deck.id} deck={deck} cb={fetchAndLoadDecks} />
+                ))}
             </SortableContext>
           </DndContext>
 

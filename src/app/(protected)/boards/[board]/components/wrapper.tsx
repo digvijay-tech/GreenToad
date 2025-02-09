@@ -65,7 +65,7 @@ export function BoardPageWrapper({ boardId }: { boardId: string }) {
       )}
 
       {/* Board Body */}
-      <div className="flex-1">
+      <div className="flex-1 py-2">
         {userProfile && board ? (
           <DeckList
             workspaceId={userProfile.default_workspace_id}
