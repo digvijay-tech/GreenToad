@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/config/supabase/server";
-import { BoardDeckType } from "@/app/(protected)/boards/types";
+import { BoardDeckType, CardType } from "@/app/(protected)/boards/types";
 
 /**
  * Creates a new deck within a specified board.
@@ -199,4 +199,97 @@ export const renameDeckById = async (
   }
 
   return "Deck updated!";
+};
+
+/**
+ * Creates a new Card in the database using Deck's unique identifier and name.
+ *
+ * @param {string} deckId - The unique identifier of the deck.
+ * @param {string} name - The name to assign to the card.
+ *
+ * @returns {Promise<Error | string>} A Promise that resolves to a success message if the rename is successful, or an Error if the update fails.
+ *
+ * This function creates the `title`, `order`, and `cover_color` fields for a card in the `cards` table via Supabase.
+ * Note: Authentication is enforced to retrive `user_id` from authenticated user.
+ **/
+export const createCardAction = async (
+  deckId: string,
+  name: string,
+): Promise<Error | string> => {
+  const supabase = await createClient();
+
+  // default cover color
+  const COVER_COLOR = "#ecf0f1";
+
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+
+  if (authError) {
+    return new Error(authError.message);
+  }
+
+  // finding the highest order of the card by given deck id
+  const { data: queryData, error: queryError } = await supabase
+    .from("cards")
+    .select()
+    .eq("deck_id", deckId)
+    .order("order", { ascending: false })
+    .limit(1);
+
+  if (queryError) {
+    return new Error(queryError.message);
+  }
+
+  const computeCardOrder = queryData.length > 0 ? queryData[0].order + 1 : 1;
+
+  // insert card
+  const { error: insertionError } = await supabase.from("cards").insert({
+    deck_id: deckId,
+    user_id: authData.user.id,
+    title: name.trim(),
+    cover_color: COVER_COLOR,
+    order: computeCardOrder,
+  });
+
+  if (insertionError) {
+    return new Error(insertionError.message);
+  }
+
+  return "New card created!";
+};
+
+/**
+ * Fetches all Cards associated with a given Deck's unique identifier from the database.
+ *
+ * @param {string} deckId - The unique identifier of the deck.
+ *
+ * @returns {Promise<Error | CardType[] | null>}
+ * A Promise that resolves to one of the following:
+ * - `CardType[]`: An array of cards ordered by their `order` field in ascending order.
+ * - `null`: If no cards are found for the specified deck.
+ * - `Error`: If the query fails due to an error in the database request.
+ *
+ * This function retrieves data from the `cards` table in Supabase, filtering by the `deck_id` field
+ * and ordering the results based on the `order` field.
+ * Note: Authentication is not enforced.
+ **/
+export const fetchCardsByDeckId = async (
+  deckId: string,
+): Promise<Error | CardType[] | null> => {
+  const supabase = await createClient();
+
+  const { data: queryData, error: queryError } = await supabase
+    .from("cards")
+    .select()
+    .eq("deck_id", deckId)
+    .order("order", { ascending: true });
+
+  if (queryError) {
+    return new Error(queryError.message);
+  }
+
+  if (queryData.length < 1) {
+    return null; // Cards array is empty
+  }
+
+  return queryData as CardType[];
 };

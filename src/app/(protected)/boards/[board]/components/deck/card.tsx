@@ -8,7 +8,6 @@ interface CardTypeProps {
   card: CardType;
   cb: () => void;
 }
-// default fallback color: bg-[#ecf0f1]
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function Card({ card, cb }: CardTypeProps) {

@@ -1,13 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useToast } from "@/hooks/use-toast";
+import { errorToast } from "@/utils/toasts";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { BoardDeckType } from "../../../types";
+import { BoardDeckType, CardType } from "../../../types";
+import { fetchCardsByDeckId } from "./actions";
 import { DeleteDeckDialog } from "./delete-deck-dialog";
 import { RenameDeckDialog } from "./rename-deck-dialog";
 import { Card } from "./card";
-import { Input } from "@/components/ui/input";
+import { CreateCard } from "./create-card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -16,7 +19,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { MoreVertical, PlusIcon } from "lucide-react";
+import { Loader2, MoreVertical } from "lucide-react";
 
 interface DeckProps {
   deck: BoardDeckType;
@@ -25,6 +28,9 @@ interface DeckProps {
 
 // Deck Component will work as Sortable Item
 export function Deck({ deck, cb }: DeckProps) {
+  const { toast } = useToast();
+  const [cards, setCards] = useState<CardType[] | null>(null);
+  const [isCardsLoading, setIsCardsLoading] = useState<boolean>(false);
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [isRenameOpen, setIsRenameOpen] = useState<boolean>(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState<boolean>(false);
@@ -35,6 +41,35 @@ export function Deck({ deck, cb }: DeckProps) {
     transition,
     touchAction: "none",
   };
+
+  // fetch and load cards
+  const fetchAndLoadCards = async () => {
+    setIsCardsLoading(true);
+    const result = await fetchCardsByDeckId(deck.id);
+
+    // on error
+    if (result instanceof Error) {
+      errorToast(toast, result.message);
+      setIsCardsLoading(false);
+      return;
+    }
+
+    // on null, meaning supabase returned an emtpy array
+    if (result === null) {
+      setCards(null);
+      setIsCardsLoading(false);
+      return;
+    }
+
+    // on success
+    setCards(result);
+    setIsCardsLoading(false);
+  };
+
+  // on load
+  useEffect(() => {
+    fetchAndLoadCards();
+  }, []);
 
   return (
     <div>
@@ -100,46 +135,29 @@ export function Deck({ deck, cb }: DeckProps) {
             </div>
           </div>
 
-          {/* Deck Body (Scrollable) */}
-          <ScrollArea className="h-full">
-            <div className="flex-3">
-              {Array.from({ length: 20 }).map((v, i) => (
-                <Card
-                  key={i}
-                  card={{
-                    id: "dwsnfgjld",
-                    user_id: "sdvjb",
-                    deck_id: "adsfvbjld",
-                    title: "dvjlbsjdv",
-                    description: "svjbcvjsbvsjbvlsn",
-                    cover_color: "#27ae60",
-                    start_date: null,
-                    due_date: null,
-                    created_at: new Date().toISOString(),
-                    updated_at: new Date().toISOString(),
-                  }}
-                  cb={cb}
-                />
-              ))}
+          {isCardsLoading ? (
+            <div className="h-full flex flex-col justify-center items-center">
+              {/* Skeleton Screen for loading Cards/list */}
+              <div className="">
+                <Loader2 className="animate-spin" />
+              </div>
             </div>
-          </ScrollArea>
+          ) : (
+            <ScrollArea className="h-full">
+              {/* Deck Body (Scrollable) */}
+              <div className="flex-3">
+                {cards &&
+                  cards.map((card) => (
+                    <Card key={card.id} card={card} cb={fetchAndLoadCards} />
+                  ))}
+              </div>
+            </ScrollArea>
+          )}
 
           {/* Fixed Deck Footer */}
           <div className="p-2 bg-white border-b">
             {/* Create Card Form */}
-            <form>
-              <div className="flex flex-row items-center justify-between">
-                <Input type="text" placeholder="Enter card name" required />
-                <Button
-                  type="submit"
-                  size="icon"
-                  variant="outline"
-                  className="ml-1"
-                >
-                  <PlusIcon />
-                </Button>
-              </div>
-            </form>
+            <CreateCard deckId={deck.id} cb={fetchAndLoadCards} />
           </div>
         </div>
       </div>
