@@ -28,15 +28,7 @@ export default function Boards() {
   };
 
   useEffect(() => {
-    (async function () {
-      const result = await fetchBoardsAction();
-
-      if (result instanceof Error) {
-        return errorToast(toast, result.message);
-      }
-
-      setBoards(result);
-    })();
+    handleCreateCallback();
   }, [workspaces]);
 
   return (

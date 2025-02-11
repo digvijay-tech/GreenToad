@@ -6,10 +6,10 @@ import { CSS } from "@dnd-kit/utilities";
 import { BoardDeckType } from "../../../types";
 import { DeleteDeckDialog } from "./delete-deck-dialog";
 import { RenameDeckDialog } from "./rename-deck-dialog";
+import { Card } from "./card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -104,45 +104,22 @@ export function Deck({ deck, cb }: DeckProps) {
           <ScrollArea className="h-full">
             <div className="flex-3">
               {Array.from({ length: 20 }).map((v, i) => (
-                <div key={i} className="px-2 mt-2 select-none cursor-pointer">
-                  <div className="shadow-xs bg-white border rounded-lg flex justify-start items-stretch">
-                    {/* Left-Side Card Color  */}
-                    <div className="w-3 bg-[#ecf0f1] rounded-tl-lg rounded-bl-lg"></div>
-
-                    {/* Right-Side Card Content */}
-                    <div className="w-full px-2 py-2 rounded-tr-lg rounded-br-lg">
-                      {/* Card Name */}
-                      <div className="mt-1">
-                        <p className="text-xs font-semibold leading-none line-clamp-2">
-                          Lorem ipsum dolor sit amet, consectetur adipisicing.
-                        </p>
-                      </div>
-
-                      {/* Labels */}
-                      <div className="mb-1 mt-3">
-                        {["One", "Two"].map((label, i) => (
-                          <Badge
-                            key={i}
-                            variant="secondary"
-                            className="mr-1 py-[0px]"
-                          >
-                            <p className="text-[10px]">{label}</p>
-                          </Badge>
-                        ))}
-                      </div>
-
-                      {/* Card Icons */}
-                      <div className="mt-2 flex">
-                        {Array.from({ length: 4 }).map((v, i) => (
-                          <PlusIcon
-                            key={i}
-                            className="h-4 mr-1 text-muted-foreground"
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <Card
+                  key={i}
+                  card={{
+                    id: "dwsnfgjld",
+                    user_id: "sdvjb",
+                    deck_id: "adsfvbjld",
+                    title: "dvjlbsjdv",
+                    description: "svjbcvjsbvsjbvlsn",
+                    cover_color: "#27ae60",
+                    start_date: null,
+                    due_date: null,
+                    created_at: new Date().toISOString(),
+                    updated_at: new Date().toISOString(),
+                  }}
+                  cb={cb}
+                />
               ))}
             </div>
           </ScrollArea>

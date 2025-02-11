@@ -28,3 +28,16 @@ export interface BoardDeckType {
   created_at: string;
   updated_at: string;
 }
+
+export interface CardType {
+  id: string;
+  deck_id: string;
+  user_id: string;
+  title: string;
+  description: string;
+  start_date: string | null;
+  due_date: string | null;
+  cover_color: string;
+  created_at: string;
+  updated_at: string;
+}
